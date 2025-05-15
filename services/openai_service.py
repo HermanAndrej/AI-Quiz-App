@@ -3,6 +3,7 @@ from config import settings
 from models.quiz import Quiz, Question
 from schemas.quiz import QuizGenerateResponse, QuizQuestion
 import json
+from datetime import datetime
 
 async def generate_quiz_ai(topic: str, difficulty: str, number_of_questions: int) -> QuizGenerateResponse:
     client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
@@ -62,5 +63,6 @@ async def generate_quiz_ai(topic: str, difficulty: str, number_of_questions: int
     await quiz.insert()
 
     return QuizGenerateResponse(
-        questions=json_data["questions"]
+        questions=json_data["questions"],
+        created_at=datetime.now()
     )

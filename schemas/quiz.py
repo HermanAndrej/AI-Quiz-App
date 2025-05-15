@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import List, Dict
+from datetime import datetime
 
 class QuizGenerateRequest(BaseModel):
 #    user_id: int
@@ -21,9 +22,11 @@ class QuizQuestion(BaseModel):
 
 class QuizGenerateResponse(BaseModel):
     questions: List[QuizQuestion]
+    created_at: datetime
 
 class QuizSubmitRequest(BaseModel):
     answers: Dict[int, str]
+    quiz_id: str
 
 class QuizSubmitResponse(BaseModel):
     score: int
