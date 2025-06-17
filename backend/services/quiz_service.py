@@ -16,9 +16,6 @@ async def submit_quiz_logic(quiz, submitted_answers: dict):
     return score
 
 async def get_quiz_result_logic(quiz_id: int, user_id: str) -> QuizResult:
-    print(f"Searching for quiz_id: {quiz_id} (type: {type(quiz_id)})")
-    print(f"Searching for user_id: {user_id} (type: {type(user_id)})")
-    
     quiz_result = await QuizResult.find_one(
         QuizResult.quiz_id == quiz_id,
         QuizResult.user_id == user_id

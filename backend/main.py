@@ -16,7 +16,7 @@ app = FastAPI(title=settings.app_name, debug=settings.debug, lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.ALLOW_ORIGIN],  # Your React app URL
+    allow_origins=[settings.ALLOW_ORIGIN],  # React app URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
