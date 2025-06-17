@@ -18,7 +18,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
         if not user_id:
             raise credentials_exception
 
-        user = await User.get(user_id)
+        user = await User.find_one(User.user_id == int(user_id))
         if not user:
             raise credentials_exception
 
