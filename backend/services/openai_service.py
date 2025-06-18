@@ -51,7 +51,11 @@ async def generate_quiz_ai(topic: str, difficulty: str, number_of_questions: int
     )
 
     content = response.choices[0].message.content
-    json_data = json.loads(content)
+    try:
+      json_data = json.loads(content)
+    except json.JSONDecodeError:
+      raise ValueError("OpenAI returned invalid JSON")
+
 
     question_objs = []
     for q in json_data.get("questions", []):
