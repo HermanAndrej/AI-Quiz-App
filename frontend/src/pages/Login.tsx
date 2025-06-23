@@ -1,29 +1,63 @@
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Mail, Lock } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import Header from "@/components/common/header";
-import Footer from "@/components/common/footer";
+import { useState } from "react"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Mail, Lock } from "lucide-react"
+import { Link, useNavigate } from "react-router-dom"
+import { motion } from "framer-motion"
+import Header from "@/components/common/header"
+import Footer from "@/components/common/footer"
 
 export default function Login() {
-  console.log("🚀 Login component loaded");
-  const [form, setForm] = useState({ email: "", password: "" });
+  console.log("Login component loaded");
+  const [form, setForm] = useState({ email: "", password: "" })
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log("🚀 MY handleSubmit function is running!");
-    e.preventDefault();
-    alert("My form handler is working!");
-    return; // Stop here for now
-  };
+    console.log("handleSubmit called");
+    e.preventDefault()
+    setLoading(true);
+    setError(null);
+    try {
+      const requestBody = JSON.stringify(form);
+      const requestHeaders = { "Content-Type": "application/json" };
+      console.log("[LOGIN] Sending request:", {
+        url: "/api/auth/login",
+        method: "POST",
+        headers: requestHeaders,
+        body: requestBody,
+      });
+      console.log("Register: Sending request...");
+      const res = await fetch("https://andrejherman.live/api/auth/login", {
+        method: "POST",
+        headers: requestHeaders,
+        body: requestBody,
+      });
+      console.log("Register: Response received", res);
+      console.log("[LOGIN] Response status:", res.status);
+      let data;
+      try {
+        data = await res.json();
+        console.log("[LOGIN] Response body:", data);
+      } catch (jsonErr) {
+        console.log("[LOGIN] Failed to parse JSON response");
+      }
+      if (!res.ok) {
+        throw new Error((data && data.detail) || "Login failed");
+      }
+      localStorage.setItem("token", data.access_token);
+      navigate("/");
+    } catch (err: any) {
+      setError(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -79,5 +113,5 @@ export default function Login() {
 
       <Footer />
     </div>
-  );
+  )
 }
