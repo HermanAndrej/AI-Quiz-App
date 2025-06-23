@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { easeOut } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -18,48 +19,127 @@ const fadeUp = {
   }),
 };
 
+function getAuthToken() {
+  return localStorage.getItem("token");
+}
+
+type UserProfile = {
+  user_id: number;
+  email: string;
+  username: string;
+  joined_at: string;
+};
+
 export default function Home() {
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const loggedIn = Boolean(getAuthToken());
+
+  useEffect(() => {
+    if (!loggedIn) {
+      setLoading(false);
+      setProfile(null);
+      return;
+    }
+    async function fetchProfile() {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch("/api/user/me", {
+          headers: { Authorization: `Bearer ${getAuthToken()}` },
+        });
+        if (!res.ok) throw new Error("Failed to fetch profile");
+        const data = await res.json();
+        setProfile(data);
+      } catch (err: any) {
+        setError("Welcome back!"); // fallback if profile fails
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProfile();
+  }, [loggedIn]);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-
       <main className="flex-grow">
-        {/* 🟢 Hero Section */}
-        <motion.section
-          className="py-20 text-center px-4"
-          initial="hidden"
-          animate="visible"
-          variants={fadeUp}
-          custom={1}
-        >
-          <motion.h1
-            className="text-4xl sm:text-5xl font-bold tracking-tight"
+        {loggedIn && !loading ? (
+          <motion.section
+            className="py-20 text-center px-4"
+            initial="hidden"
+            animate="visible"
             variants={fadeUp}
-            custom={2}
+            custom={1}
           >
-            Learn Smarter with AI-Powered Quizzes
-          </motion.h1>
-          <motion.p
-            className="mt-4 text-muted-foreground max-w-2xl mx-auto text-lg"
-            variants={fadeUp}
-            custom={3}
-          >
-            Personalized quizzes that adapt to your knowledge level. Track
-            progress, boost retention, and have fun while learning.
-          </motion.p>
-          <motion.div
-            className="mt-6 flex justify-center gap-4"
-            variants={fadeUp}
-            custom={4}
-          >
-            <Button asChild size="lg">
-              <Link to="/register">Get Started</Link>
-            </Button>
-            <Button variant="outline" asChild size="lg">
-              <Link to="/about">Learn More</Link>
-            </Button>
-          </motion.div>
-        </motion.section>
+            <motion.h1
+              className="text-4xl sm:text-5xl font-bold tracking-tight"
+              variants={fadeUp}
+              custom={2}
+            >
+              {profile ? `Welcome back, ${profile.username}!` : error}
+            </motion.h1>
+            <motion.p
+              className="mt-4 text-muted-foreground max-w-2xl mx-auto text-lg"
+              variants={fadeUp}
+              custom={3}
+            >
+              Ready to continue your learning journey?
+            </motion.p>
+            <motion.div
+              className="mt-6 flex justify-center gap-4"
+              variants={fadeUp}
+              custom={4}
+            >
+              <Button asChild size="lg">
+                <Link to="/quiz">Take a Quiz</Link>
+              </Button>
+              <Button variant="outline" asChild size="lg">
+                <Link to="/profile">View Profile</Link>
+              </Button>
+            </motion.div>
+          </motion.section>
+        ) : (
+          <>
+            {/* 🟢 Hero Section for guests */}
+            <motion.section
+              className="py-20 text-center px-4"
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              custom={1}
+            >
+              <motion.h1
+                className="text-4xl sm:text-5xl font-bold tracking-tight"
+                variants={fadeUp}
+                custom={2}
+              >
+                Learn Smarter with AI-Powered Quizzes
+              </motion.h1>
+              <motion.p
+                className="mt-4 text-muted-foreground max-w-2xl mx-auto text-lg"
+                variants={fadeUp}
+                custom={3}
+              >
+                Personalized quizzes that adapt to your knowledge level. Track
+                progress, boost retention, and have fun while learning.
+              </motion.p>
+              <motion.div
+                className="mt-6 flex justify-center gap-4"
+                variants={fadeUp}
+                custom={4}
+              >
+                <Button asChild size="lg">
+                  <Link to="/register">Get Started</Link>
+                </Button>
+                <Button variant="outline" asChild size="lg">
+                  <Link to="/about">Learn More</Link>
+                </Button>
+              </motion.div>
+            </motion.section>
+          </>
+        )}
 
         {/* 🟢 Features Section */}
         <motion.section
@@ -145,7 +225,6 @@ export default function Home() {
           </div>
         </motion.section>
       </main>
-
       <Footer />
     </div>
   );

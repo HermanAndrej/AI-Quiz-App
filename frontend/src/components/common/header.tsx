@@ -15,8 +15,31 @@ import {
 import { Link } from "react-router-dom";
 import { X } from "lucide-react";
 
+function isLoggedIn() {
+  return Boolean(localStorage.getItem("token"));
+}
+
 export default function Header() {
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
+  const [loggedIn, setLoggedIn] = useState(isLoggedIn());
+
+  // Listen for login/logout changes in localStorage
+  useEffect(() => {
+    const handler = () => setLoggedIn(isLoggedIn());
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
+
+  // For instant update after login/logout in this tab
+  useEffect(() => {
+    setLoggedIn(isLoggedIn());
+  });
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setLoggedIn(false);
+    window.location.href = "/";
+  };
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -55,6 +78,12 @@ export default function Header() {
                 { href: "/", label: "Home" },
                 { href: "/about", label: "About" },
                 { href: "/contact", label: "Contact" },
+                ...(loggedIn
+                  ? [
+                      { href: "/quiz", label: "Quiz" },
+                      { href: "/profile", label: "Profile" },
+                    ]
+                  : []),
               ].map(({ href, label }) => (
                 <NavigationMenuItem key={href}>
                   <NavigationMenuLink asChild>
@@ -73,18 +102,28 @@ export default function Header() {
 
         {/* DESKTOP BUTTONS */}
         <div className="hidden md:flex items-center gap-2">
-          <Button variant="ghost" asChild>
-            <Link to="/login">Login</Link>
-          </Button>
-          <Button asChild>
-            <Link to="/register">Sign Up</Link>
-          </Button>
+          {loggedIn ? (
+            <>
+              <Button variant="outline" onClick={handleLogout}>
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost" asChild>
+                <Link to="/login">Login</Link>
+              </Button>
+              <Button asChild>
+                <Link to="/register">Sign Up</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* MOBILE MENU */}
         <Sheet>
-          <SheetTrigger className="md:hidden">
-            <Button variant="ghost" size="icon" aria-label="Open menu">
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" aria-label="Open menu" className="md:hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
@@ -117,6 +156,12 @@ export default function Header() {
                 { href: "/", label: "Home" },
                 { href: "/about", label: "About" },
                 { href: "/contact", label: "Contact" },
+                ...(loggedIn
+                  ? [
+                      { href: "/quiz", label: "Quiz" },
+                      { href: "/profile", label: "Profile" },
+                    ]
+                  : []),
               ].map(({ href, label }) => (
                 <SheetClose asChild key={href}>
                   <Link
@@ -129,16 +174,26 @@ export default function Header() {
               ))}
             </nav>
             <div className="mt-8 flex flex-col space-y-3">
-              <SheetClose asChild>
-                <Button variant="outline" asChild>
-                  <Link to="/login">Login</Link>
-                </Button>
-              </SheetClose>
-              <SheetClose asChild>
-                <Button asChild>
-                  <Link to="/register">Sign Up</Link>
-                </Button>
-              </SheetClose>
+              {loggedIn ? (
+                <SheetClose asChild>
+                  <Button variant="outline" onClick={handleLogout}>
+                    Logout
+                  </Button>
+                </SheetClose>
+              ) : (
+                <>
+                  <SheetClose asChild>
+                    <Button variant="outline" asChild>
+                      <Link to="/login">Login</Link>
+                    </Button>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Button asChild>
+                      <Link to="/register">Sign Up</Link>
+                    </Button>
+                  </SheetClose>
+                </>
+              )}
             </div>
           </SheetContent>
         </Sheet>

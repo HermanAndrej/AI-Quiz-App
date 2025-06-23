@@ -2,22 +2,57 @@ import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Mail, Lock } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import Header from "@/components/common/header"
 import Footer from "@/components/common/footer"
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" })
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Integrate login API
-    console.log("Logging in:", form)
+    setLoading(true);
+    setError(null);
+    try {
+      const requestBody = JSON.stringify(form);
+      const requestHeaders = { "Content-Type": "application/json" };
+      console.log("[LOGIN] Sending request:", {
+        url: "/api/auth/login",
+        method: "POST",
+        headers: requestHeaders,
+        body: requestBody,
+      });
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: requestHeaders,
+        body: requestBody,
+      });
+      console.log("[LOGIN] Response status:", res.status);
+      let data;
+      try {
+        data = await res.json();
+        console.log("[LOGIN] Response body:", data);
+      } catch (jsonErr) {
+        console.log("[LOGIN] Failed to parse JSON response");
+      }
+      if (!res.ok) {
+        throw new Error((data && data.detail) || "Login failed");
+      }
+      localStorage.setItem("token", data.access_token);
+      navigate("/");
+    } catch (err: any) {
+      setError(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -58,12 +93,13 @@ export default function Login() {
               />
             </div>
 
-            <Button type="submit" className="w-full">
-              Login
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
             </Button>
           </form>
+          {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
           <p className="text-sm text-center text-muted-foreground mt-4">
-            Don’t have an account?{" "}
+            Don't have an account?{" "}
             <Link to="/register" className="text-primary hover:underline">
               Register
             </Link>

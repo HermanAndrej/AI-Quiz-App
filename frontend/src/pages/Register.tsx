@@ -2,22 +2,48 @@ import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Mail, Lock, User } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import Header from "@/components/common/header"
 import Footer from "@/components/common/footer"
 
 export default function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" })
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Integrate register API
-    console.log("Registering:", form)
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: form.email,
+          username: form.name,
+          password: form.password,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.detail || "Registration failed");
+      }
+      setSuccess("Registration successful! Redirecting to login...");
+      setTimeout(() => navigate("/login"), 1500);
+    } catch (err: any) {
+      setError(err.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -70,10 +96,12 @@ export default function Register() {
               />
             </div>
 
-            <Button type="submit" className="w-full">
-              Register
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Registering..." : "Register"}
             </Button>
           </form>
+          {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+          {success && <p className="text-green-600 mt-4 text-center">{success}</p>}
           <p className="text-sm text-center text-muted-foreground mt-4">
             Already have an account?{" "}
             <Link to="/login" className="text-primary hover:underline">

@@ -5,9 +5,9 @@ from pydantic import Field, BaseModel
 from enum import Enum
 
 class Difficulty(str, Enum):
-    EASY = "easy"
-    MEDIUM = "medium"
-    HARD = "hard"
+    EASY = "Easy"
+    MEDIUM = "Medium"
+    HARD = "Hard"
 
 class Question(BaseModel):
     question_id: int
