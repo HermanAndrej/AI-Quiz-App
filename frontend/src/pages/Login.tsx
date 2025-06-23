@@ -30,11 +30,13 @@ export default function Login() {
         headers: requestHeaders,
         body: requestBody,
       });
+      console.log("Register: Sending request...");
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: requestHeaders,
         body: requestBody,
       });
+      console.log("Register: Response received", res);
       console.log("[LOGIN] Response status:", res.status);
       let data;
       try {
