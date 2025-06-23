@@ -7,5 +7,17 @@ from models.quiz_result import QuizResult
 
 async def init_db():
     client = AsyncIOMotorClient(settings.MONGO_URI)
+
+    try:
+        await client.admin.command("ping")
+        print("✅ Connected to MongoDB Atlas")
+    except Exception as e:
+        print("❌ MongoDB connection failed:", e)
+        raise e
+
     db = client[settings.DATABASE_NAME]
-    await init_beanie(database=db, document_models=[User, Quiz, QuizResult])
+
+    await init_beanie(
+        database=db,
+        document_models=[User, Quiz, QuizResult],
+    )
