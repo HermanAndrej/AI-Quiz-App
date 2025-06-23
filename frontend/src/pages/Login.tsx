@@ -8,6 +8,7 @@ import Header from "@/components/common/header";
 import Footer from "@/components/common/footer";
 
 export default function Login() {
+  console.log("🚀 Login component loaded");
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
