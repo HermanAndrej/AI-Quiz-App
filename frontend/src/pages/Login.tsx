@@ -31,7 +31,7 @@ export default function Login() {
         body: requestBody,
       });
       console.log("Register: Sending request...");
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("https://andrejherman.live/api/auth/login", {
         method: "POST",
         headers: requestHeaders,
         body: requestBody,
