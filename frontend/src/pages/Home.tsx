@@ -3,6 +3,7 @@ import Footer from "@/components/common/footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { easeOut } from "framer-motion";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -12,7 +13,7 @@ const fadeUp = {
     transition: {
       delay: i * 0.15,
       duration: 0.5,
-      ease: "easeOut",
+      ease: easeOut,
     },
   }),
 };
