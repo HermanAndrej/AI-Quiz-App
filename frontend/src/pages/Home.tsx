@@ -31,10 +31,12 @@ type UserProfile = {
 };
 
 export default function Home() {
+  console.log("🏠 Home component loaded");
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const loggedIn = Boolean(getAuthToken());
+  console.log("🏠 Home component loaded");
 
   useEffect(() => {
     if (!loggedIn) {
