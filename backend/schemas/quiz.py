@@ -35,6 +35,7 @@ class QuizSubmitResponse(BaseModel):
     score: int
     total: int
     message: str
+    correct_answers: dict[int, str]
 
 class QuizResultResponse(BaseModel):
     quiz_id: int

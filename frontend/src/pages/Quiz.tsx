@@ -25,6 +25,7 @@ type SubmitResponse = {
   score: number;
   total: number;
   message: string;
+  correct_answers: Record<number, string>;
 };
 
 export default function Quiz() {
@@ -173,29 +174,64 @@ export default function Quiz() {
               }}
               className="space-y-6"
             >
-              {quiz.questions.map((q, idx) => (
-                <div key={q.question_id} className="mb-6">
-                  <div className="font-medium mb-2">
-                    {idx + 1}. {q.question_text}
+              {quiz.questions.map((q, idx) => {
+                const userAnswer = answers[q.question_id];
+                const correctAnswer = submitResult?.correct_answers?.[q.question_id];
+                return (
+                  <div key={q.question_id} className="mb-6">
+                    <div className="font-medium mb-2">
+                      {idx + 1}. {q.question_text}
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {Object.entries(q.options).map(([key, val]) => {
+                        // Show answer feedback after submission
+                        let highlight = "";
+                        if (submitResult) {
+                          if (key === correctAnswer && key === userAnswer) {
+                            highlight = "bg-green-100 border-green-500";
+                          } else if (key === userAnswer && key !== correctAnswer) {
+                            highlight = "bg-red-100 border-red-500";
+                          } else if (key === correctAnswer) {
+                            highlight = "bg-green-50 border-green-300";
+                          }
+                        }
+                        return (
+                          <label
+                            key={key}
+                            className={`flex items-center gap-2 cursor-pointer border rounded-md p-2 ${highlight}`}
+                          >
+                            <input
+                              type="radio"
+                              name={`q_${q.question_id}`}
+                              value={key}
+                              checked={answers[q.question_id] === key}
+                              onChange={() => handleAnswer(q.question_id, key)}
+                              required
+                              disabled={!!submitResult}
+                            />
+                            <span>{val}</span>
+                            {submitResult && key === correctAnswer && (
+                              <span className="ml-2 text-green-600 font-bold text-xs">Correct</span>
+                            )}
+                            {submitResult && key === userAnswer && key !== correctAnswer && (
+                              <span className="ml-2 text-red-600 font-bold text-xs">Your answer</span>
+                            )}
+                          </label>
+                        );
+                      })}
+                    </div>
+                    {submitResult && (
+                      <div className="mt-2 text-sm">
+                        <span>Your answer: </span>
+                        <span className={userAnswer === correctAnswer ? "text-green-600" : "text-red-600"}>
+                          {q.options[userAnswer] || <span className="text-gray-400">No answer</span>}
+                        </span>
+                        <span className="ml-4">Correct answer: <span className="text-green-600">{correctAnswer && q.options[correctAnswer] ? q.options[correctAnswer] : <span className="text-gray-400">N/A</span>}</span></span>
+                      </div>
+                    )}
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {Object.entries(q.options).map(([key, val]) => (
-                      <label key={key} className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name={`q_${q.question_id}`}
-                          value={key}
-                          checked={answers[q.question_id] === key}
-                          onChange={() => handleAnswer(q.question_id, key)}
-                          required
-                          disabled={!!submitResult}
-                        />
-                        <span>{val}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
               {!submitResult && (
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Submitting..." : "Submit Quiz"}

@@ -28,9 +28,7 @@ async def generate_quiz(quiz_request: QuizGenerateRequest, created_by: str = Dep
 # Submits a quiz with the user's answers and calculates the score, saves the result in QuizResult
 @router.post("/submit", response_model=QuizSubmitResponse, status_code=status.HTTP_200_OK)
 async def submit_quiz(quiz_submit_request: QuizSubmitRequest, current_user: User = Depends(get_current_user)) -> QuizSubmitResponse:
-    quiz = await get_quiz_by_id(
-        quiz_submit_request.quiz_id)
-    
+    quiz = await get_quiz_by_id(quiz_submit_request.quiz_id)
     score = await submit_quiz_logic(quiz, quiz_submit_request.answers)
 
     quiz_result = QuizResult(
@@ -40,15 +38,18 @@ async def submit_quiz(quiz_submit_request: QuizSubmitRequest, current_user: User
         total_questions=quiz.number_of_questions,
         submitted_answers=quiz_submit_request.answers
     )
-
     quiz_result = await quiz_result.insert()
-    if not quiz_result: 
+    if not quiz_result:
         raise HTTPException(status_code=500, detail="Failed to save quiz result")
+
+    # Build correct_answers dict from quiz.questions
+    correct_answers = {q.question_id: q.correct_option for q in quiz.questions}
 
     return QuizSubmitResponse(
         score=score,
         total=quiz.number_of_questions,
-        message="Quiz submitted successfully"
+        message="Quiz submitted successfully",
+        correct_answers=correct_answers
     )
 
 # Retrieves a quiz by its ID, including all questions and their options
