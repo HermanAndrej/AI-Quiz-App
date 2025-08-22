@@ -177,6 +177,7 @@ export default function Quiz() {
               {quiz.questions.map((q, idx) => {
                 const userAnswer = answers[q.question_id];
                 const correctAnswer = submitResult?.correct_answers?.[q.question_id];
+                const isCorrect = userAnswer === correctAnswer;
                 return (
                   <div key={q.question_id} className="mb-6">
                     <div className="font-medium mb-2">
@@ -184,12 +185,11 @@ export default function Quiz() {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {Object.entries(q.options).map(([key, val]) => {
-                        // Show answer feedback after submission
                         let highlight = "";
                         if (submitResult) {
-                          if (key === correctAnswer && key === userAnswer) {
+                          if (key === userAnswer && isCorrect) {
                             highlight = "bg-green-100 border-green-500";
-                          } else if (key === userAnswer && key !== correctAnswer) {
+                          } else if (key === userAnswer && !isCorrect) {
                             highlight = "bg-red-100 border-red-500";
                           } else if (key === correctAnswer) {
                             highlight = "bg-green-50 border-green-300";
@@ -211,9 +211,9 @@ export default function Quiz() {
                             />
                             <span>{val}</span>
                             {submitResult && key === correctAnswer && (
-                              <span className="ml-2 text-green-600 font-bold text-xs">Correct</span>
+                              <span className="ml-2 text-green-600 font-bold text-xs">Correct answer</span>
                             )}
-                            {submitResult && key === userAnswer && key !== correctAnswer && (
+                            {submitResult && key === userAnswer && !isCorrect && (
                               <span className="ml-2 text-red-600 font-bold text-xs">Your answer</span>
                             )}
                           </label>
@@ -223,8 +223,8 @@ export default function Quiz() {
                     {submitResult && (
                       <div className="mt-2 text-sm">
                         <span>Your answer: </span>
-                        <span className={userAnswer === correctAnswer ? "text-green-600" : "text-red-600"}>
-                          {q.options[userAnswer] || <span className="text-gray-400">No answer</span>}
+                        <span className={isCorrect ? "text-green-600" : "text-red-600"}>
+                          {userAnswer && q.options[userAnswer] ? q.options[userAnswer] : <span className="text-gray-400">No answer</span>}
                         </span>
                         <span className="ml-4">Correct answer: <span className="text-green-600">{correctAnswer && q.options[correctAnswer] ? q.options[correctAnswer] : <span className="text-gray-400">N/A</span>}</span></span>
                       </div>
