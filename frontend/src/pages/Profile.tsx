@@ -27,16 +27,14 @@ export default function Profile() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const token = getValidAuthToken();
+    if (!token) {
+      navigate("/login");
+      return;
+    }
     async function fetchProfile() {
       setLoading(true);
       setError(null);
-      
-      const token = getValidAuthToken();
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-      
       try {
         const res = await fetch("/api/user/me", {
           headers: { Authorization: `Bearer ${token}` },
