@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
-import Header from "@/components/common/header";
-import Footer from "@/components/common/footer";
-
-function getAuthToken() {
-  return localStorage.getItem("token");
-}
+import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
+import { getValidAuthToken } from "@/lib/auth";
+import { useNavigate } from "react-router-dom";
 
 type UserProfile = {
   user_id: number;
@@ -22,6 +20,7 @@ type UserStats = {
 };
 
 export default function Profile() {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -31,16 +30,23 @@ export default function Profile() {
     async function fetchProfile() {
       setLoading(true);
       setError(null);
+      
+      const token = getValidAuthToken();
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+      
       try {
         const res = await fetch("/api/user/me", {
-          headers: { Authorization: `Bearer ${getAuthToken()}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Failed to fetch profile");
         const data = await res.json();
         setProfile(data);
         // Fetch stats
         const statsRes = await fetch(`/api/user/${data.user_id}/statistics`, {
-          headers: { Authorization: `Bearer ${getAuthToken()}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
         if (statsRes.status === 404) {
           setStats(null); // No stats yet, not an error
@@ -57,7 +63,7 @@ export default function Profile() {
       }
     }
     fetchProfile();
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="flex flex-col min-h-screen">

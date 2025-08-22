@@ -1,5 +1,5 @@
-import Header from "@/components/common/header"
-import Footer from "@/components/common/footer"
+import Header from "@/components/common/Header"
+import Footer from "@/components/common/Footer"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import {

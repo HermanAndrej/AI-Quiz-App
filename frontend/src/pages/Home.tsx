@@ -1,5 +1,5 @@
-import Header from "@/components/common/header";
-import Footer from "@/components/common/footer";
+import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -19,9 +19,7 @@ const fadeUp = {
   }),
 };
 
-function getAuthToken() {
-  return localStorage.getItem("token");
-}
+import { getValidAuthToken, isLoggedIn } from "@/lib/auth";
 
 type UserProfile = {
   user_id: number;
@@ -35,7 +33,7 @@ export default function Home() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const loggedIn = Boolean(getAuthToken());
+  const loggedIn = isLoggedIn();
   console.log("🏠 Home component loaded");
 
   useEffect(() => {
@@ -47,9 +45,17 @@ export default function Home() {
     async function fetchProfile() {
       setLoading(true);
       setError(null);
+      
+      const token = getValidAuthToken();
+      if (!token) {
+        setLoading(false);
+        setProfile(null);
+        return;
+      }
+      
       try {
         const res = await fetch("/api/user/me", {
-          headers: { Authorization: `Bearer ${getAuthToken()}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Failed to fetch profile");
         const data = await res.json();

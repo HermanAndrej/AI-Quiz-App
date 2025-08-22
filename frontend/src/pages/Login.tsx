@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Mail, Lock } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
-import Header from "@/components/common/header"
-import Footer from "@/components/common/footer"
+import Header from "@/components/common/Header"
+import Footer from "@/components/common/Footer"
 
 export default function Login() {
   console.log("Login component loaded");

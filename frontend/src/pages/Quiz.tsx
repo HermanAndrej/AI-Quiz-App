@@ -2,13 +2,9 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import Header from "@/components/common/header";
-import Footer from "@/components/common/footer";
-
-// Placeholder: Replace with your actual auth token retrieval logic
-function getAuthToken() {
-  return localStorage.getItem("token");
-}
+import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
+import { getValidAuthToken } from "@/lib/auth";
 
 const DIFFICULTIES = ["Easy", "Medium", "Hard"];
 
@@ -54,12 +50,20 @@ export default function Quiz() {
     setQuiz(null);
     setSubmitResult(null);
     setAnswers({});
+    
+    const token = getValidAuthToken();
+    if (!token) {
+      setError("Please log in to generate a quiz");
+      setLoading(false);
+      return;
+    }
+    
     try {
       const res = await fetch("/api/quiz/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${getAuthToken()}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           topic: form.topic,
@@ -85,12 +89,20 @@ export default function Quiz() {
     if (!quiz) return;
     setLoading(true);
     setError(null);
+    
+    const token = getValidAuthToken();
+    if (!token) {
+      setError("Please log in to submit the quiz");
+      setLoading(false);
+      return;
+    }
+    
     try {
       const res = await fetch("/api/quiz/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${getAuthToken()}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           quiz_id: quiz.quiz_id,
