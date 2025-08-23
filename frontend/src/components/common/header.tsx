@@ -14,10 +14,7 @@ import {
 } from "@/components/ui/sheet";
 import { Link } from "react-router-dom";
 import { X } from "lucide-react";
-
-function isLoggedIn() {
-  return Boolean(localStorage.getItem("token"));
-}
+import { isLoggedIn } from "@/lib/auth";
 
 export default function Header() {
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");

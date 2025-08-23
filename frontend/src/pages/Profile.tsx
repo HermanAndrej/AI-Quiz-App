@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
-import { getValidAuthToken } from "@/lib/auth";
+import { getValidAuthToken, isLoggedIn } from "@/lib/auth";
 import { useNavigate } from "react-router-dom";
 
 type UserProfile = {
@@ -26,7 +26,12 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Redirect to login if not logged in
   useEffect(() => {
+    if (!isLoggedIn()) {
+      navigate("/login");
+      return;
+    }
     const token = getValidAuthToken();
     if (!token) {
       navigate("/login");
@@ -119,4 +124,4 @@ export default function Profile() {
       <Footer />
     </div>
   );
-} 
+}

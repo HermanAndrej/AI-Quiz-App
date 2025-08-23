@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
-import { getValidAuthToken } from "@/lib/auth";
+import { getValidAuthToken, isLoggedIn } from "@/lib/auth";
+import { useNavigate } from "react-router-dom";
 
 const DIFFICULTIES = ["Easy", "Medium", "Hard"];
 
@@ -39,6 +40,14 @@ export default function Quiz() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [submitResult, setSubmitResult] = useState<SubmitResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  // Redirect to login if not logged in
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -51,14 +60,13 @@ export default function Quiz() {
     setQuiz(null);
     setSubmitResult(null);
     setAnswers({});
-    
+
     const token = getValidAuthToken();
     if (!token) {
-      setError("Please log in to generate a quiz");
-      setLoading(false);
+      navigate("/login");
       return;
     }
-    
+
     try {
       const res = await fetch("/api/quiz/generate", {
         method: "POST",
@@ -90,14 +98,13 @@ export default function Quiz() {
     if (!quiz) return;
     setLoading(true);
     setError(null);
-    
+
     const token = getValidAuthToken();
     if (!token) {
-      setError("Please log in to submit the quiz");
-      setLoading(false);
+      navigate("/login");
       return;
     }
-    
+
     try {
       const res = await fetch("/api/quiz/submit", {
         method: "POST",
@@ -111,9 +118,9 @@ export default function Quiz() {
         }),
       });
       if (!res.ok) throw new Error("Failed to submit quiz");
-  const data = await res.json();
-  console.log("Quiz submit response:", data);
-  setSubmitResult(data);
+      const data = await res.json();
+      console.log("Quiz submit response:", data);
+      setSubmitResult(data);
     } catch (err: any) {
       setError(err.message || "Unknown error");
     } finally {
@@ -253,4 +260,4 @@ export default function Quiz() {
       <Footer />
     </div>
   );
-} 
+}
