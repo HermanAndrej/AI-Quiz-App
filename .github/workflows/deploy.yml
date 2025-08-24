@@ -18,11 +18,19 @@ jobs:
           key: ${{ secrets.DROPLET_PRIVATE_KEY }}
           script: |
             cd /opt/AI-Quiz-App
+
+            # Pull latest code
             git pull
+
+            # Frontend
             cd frontend
             npm install
             npm run build
-            cd ../backend
-            source venv/bin/activate
+
+            # Backend
+            cd ..
+            source backend/venv/bin/activate
             pip install -r requirements.txt
+
+            # Restart backend service
             systemctl restart backend
