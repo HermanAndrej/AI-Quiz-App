@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
-import { getValidAuthToken, isLoggedIn } from "@/lib/auth";
-import { useNavigate } from "react-router-dom";
+import { getValidAuthToken } from "@/lib/auth";
+import { useNavigate, Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 type UserProfile = {
   user_id: number;
@@ -26,17 +27,14 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Redirect to login if not logged in
+  // Redirect to login if not logged in or token invalid
   useEffect(() => {
-    if (!isLoggedIn()) {
-      navigate("/login");
-      return;
-    }
     const token = getValidAuthToken();
     if (!token) {
       navigate("/login");
       return;
     }
+
     async function fetchProfile() {
       setLoading(true);
       setError(null);
@@ -44,15 +42,25 @@ export default function Profile() {
         const res = await fetch("/api/user/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
+        if (res.status === 401) {
+          navigate("/login");
+          return;
+        }
         if (!res.ok) throw new Error("Failed to fetch profile");
+
         const data = await res.json();
         setProfile(data);
+
         // Fetch stats
         const statsRes = await fetch(`/api/user/${data.user_id}/statistics`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (statsRes.status === 404) {
-          setStats(null); // No stats yet, not an error
+
+        if (statsRes.status === 401) {
+          navigate("/login");
+          return;
+        } else if (statsRes.status === 404) {
+          setStats(null); // No stats yet
         } else if (!statsRes.ok) {
           throw new Error("Failed to fetch stats");
         } else {
@@ -65,6 +73,7 @@ export default function Profile() {
         setLoading(false);
       }
     }
+
     fetchProfile();
   }, [navigate]);
 
@@ -92,7 +101,8 @@ export default function Profile() {
                   <span className="font-semibold">User ID:</span> {profile.user_id}
                 </div>
                 <div>
-                  <span className="font-semibold">Joined:</span> {new Date(profile.joined_at).toLocaleDateString()}
+                  <span className="font-semibold">Joined:</span>{" "}
+                  {new Date(profile.joined_at).toLocaleDateString()}
                 </div>
               </div>
             )}
@@ -104,7 +114,8 @@ export default function Profile() {
                     <span className="font-semibold">Total Quizzes:</span> {stats.total_quizzes}
                   </div>
                   <div>
-                    <span className="font-semibold">Average Score:</span> {stats.average_score?.toFixed(1) ?? "-"}
+                    <span className="font-semibold">Average Score:</span>{" "}
+                    {stats.average_score?.toFixed(1) ?? "-"}
                   </div>
                   <div>
                     <span className="font-semibold">Highest Score:</span> {stats.highest_score ?? "-"}
@@ -116,7 +127,12 @@ export default function Profile() {
               </div>
             )}
             {stats === null && !loading && !error && (
-              <div className="mt-8 text-center text-muted-foreground">No quiz stats yet.</div>
+              <div className="mt-8 text-center text-muted-foreground">
+                <p>No quiz stats yet.</p>
+                <Button asChild className="mt-4">
+                  <Link to="/quiz">Take your first quiz</Link>
+                </Button>
+              </div>
             )}
           </CardContent>
         </Card>

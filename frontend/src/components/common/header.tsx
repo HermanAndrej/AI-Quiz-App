@@ -14,52 +14,34 @@ import {
 } from "@/components/ui/sheet";
 import { Link } from "react-router-dom";
 import { X } from "lucide-react";
-import { isLoggedIn } from "@/lib/auth";
+import { isLoggedIn, removeAuthToken } from "@/lib/auth";
 
 export default function Header() {
-  const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
-  const [loggedIn, setLoggedIn] = useState(isLoggedIn());
+  const [, forceUpdate] = useState({});
 
-  // Listen for login/logout changes in localStorage
+  // Force a re-render when storage changes (e.g., login/logout in another tab)
   useEffect(() => {
-    const handler = () => setLoggedIn(isLoggedIn());
+    const handler = () => forceUpdate({});
     window.addEventListener("storage", handler);
     return () => window.removeEventListener("storage", handler);
   }, []);
 
-  // For instant update after login/logout in this tab
+  // Optional: also re-check token validity every 30s in case it expires silently
   useEffect(() => {
-    setLoggedIn(isLoggedIn());
-  });
+    const interval = setInterval(() => forceUpdate({}), 30 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const loggedIn = isLoggedIn();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    setLoggedIn(false);
+    removeAuthToken();
     window.location.href = "/";
   };
 
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
-
-    const updateScrollDir = () => {
-      const scrollY = window.scrollY;
-      if (Math.abs(scrollY - lastScrollY) < 10) return; // prevent micro-scroll flicker
-
-      setScrollDirection(scrollY > lastScrollY ? "down" : "up");
-      lastScrollY = scrollY;
-    };
-
-    window.addEventListener("scroll", updateScrollDir);
-    return () => window.removeEventListener("scroll", updateScrollDir);
-  }, []);
-
   return (
     <header
-      className={`sticky top-0 z-50 border-b bg-background/80 backdrop-blur shadow-sm transition-all duration-500 ease-in-out ${
-        scrollDirection === "down"
-          ? "-translate-y-full opacity-0"
-          : "translate-y-0 opacity-100"
-      }`}
+      className={`sticky top-0 z-50 border-b bg-background/80 backdrop-blur shadow-sm transition-all duration-500 ease-in-out`}
     >
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* LOGO */}
@@ -100,11 +82,9 @@ export default function Header() {
         {/* DESKTOP BUTTONS */}
         <div className="hidden md:flex items-center gap-2">
           {loggedIn ? (
-            <>
-              <Button variant="outline" onClick={handleLogout}>
-                Logout
-              </Button>
-            </>
+            <Button variant="outline" onClick={handleLogout}>
+              Logout
+            </Button>
           ) : (
             <>
               <Button variant="ghost" asChild>
@@ -120,7 +100,12 @@ export default function Header() {
         {/* MOBILE MENU */}
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" aria-label="Open menu" className="md:hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Open menu"
+              className="md:hidden"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
