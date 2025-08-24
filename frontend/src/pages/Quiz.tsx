@@ -218,25 +218,10 @@ export default function Quiz() {
                               disabled={!!submitResult}
                             />
                             <span>{val}</span>
-                            {submitResult && key === correctAnswer && (
-                              <span className="ml-2 text-green-600 font-bold text-xs">Correct answer</span>
-                            )}
-                            {submitResult && key === userAnswer && !isCorrect && (
-                              <span className="ml-2 text-red-600 font-bold text-xs">Your answer</span>
-                            )}
                           </label>
                         );
                       })}
                     </div>
-                    {submitResult && (
-                      <div className="mt-2 text-sm">
-                        <span>Your answer: </span>
-                        <span className={isCorrect ? "text-green-600" : "text-red-600"}>
-                          {userAnswer && q.options[userAnswer] ? q.options[userAnswer] : <span className="text-gray-400">No answer</span>}
-                        </span>
-                        <span className="ml-4">Correct answer: <span className="text-green-600">{correctAnswer && q.options[correctAnswer] ? q.options[correctAnswer] : <span className="text-gray-400">N/A</span>}</span></span>
-                      </div>
-                    )}
                   </div>
                 );
               })}
