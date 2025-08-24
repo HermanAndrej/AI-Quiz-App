@@ -1,6 +1,6 @@
 import { useState } from "react"
-import Header from "@/components/common/Header"
-import Footer from "@/components/common/Footer"
+import Header from "@/components/common/header"
+import Footer from "@/components/common/footer"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { Mail, MessageSquare, User } from "lucide-react"

@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import Header from "@/components/common/Header";
-import Footer from "@/components/common/Footer";
+import Header from "@/components/common/header";
+import Footer from "@/components/common/footer";
 import { getValidAuthToken, isLoggedIn } from "@/lib/auth";
 import { useNavigate } from "react-router-dom";
 

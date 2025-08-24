@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
-import Header from "@/components/common/Header";
-import Footer from "@/components/common/Footer";
+import Header from "@/components/common/header";
+import Footer from "@/components/common/footer";
 import { getValidAuthToken } from "@/lib/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";

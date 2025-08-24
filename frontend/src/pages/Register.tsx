@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Mail, Lock, User } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
-import Header from "@/components/common/Header"
-import Footer from "@/components/common/Footer"
+import Header from "@/components/common/header"
+import Footer from "@/components/common/footer"
 
 export default function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" })
