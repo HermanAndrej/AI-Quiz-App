@@ -51,7 +51,10 @@ export function isTokenValid(): boolean {
   try {
     // Check JWT structure
     const parts = token.split('.');
-    if (parts.length !== 3) return false;
+    if (parts.length !== 3) {
+      removeAuthToken();
+      return false;
+    }
     
     // Check if token is expired
     if (isTokenExpired(token)) {

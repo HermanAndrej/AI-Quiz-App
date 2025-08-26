@@ -1,23 +1,41 @@
-import { useState } from "react"
-import Header from "@/components/common/header"
-import Footer from "@/components/common/footer"
-import { Button } from "@/components/ui/button"
-import { motion } from "framer-motion"
-import { Mail, MessageSquare, User } from "lucide-react"
+import { useState, useRef } from "react";
+import Header from "@/components/common/header";
+import Footer from "@/components/common/footer";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { Mail, MessageSquare, User } from "lucide-react";
+import emailjs from "@emailjs/browser";
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" })
-  const [submitted, setSubmitted] = useState(false)
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [submitted, setSubmitted] = useState(false);
+
+  const formRef = useRef<HTMLFormElement>(null); // ref for the form
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setSubmitted(true)
-    // You can connect this with an API later
-  }
+    e.preventDefault();
+    if (!formRef.current) return;
+
+    emailjs
+      .sendForm(
+        process.env.REACT_APP_EMAILJS_SERVICE_ID!,
+        process.env.REACT_APP_EMAILJS_TEMPLATE_ID!,
+        formRef.current,
+        process.env.REACT_APP_EMAILJS_PUBLIC_KEY!
+      )
+      .then(() => {
+        setSubmitted(true);
+        setForm({ name: "", email: "", message: "" }); // clear form
+      })
+      .catch((err) => {
+        console.error("Failed to send message:", err);
+        alert("Failed to send message. Please try again.");
+      });
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -53,7 +71,7 @@ export default function Contact() {
                 🎉 Thanks for reaching out! We’ll reply shortly.
               </motion.p>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block mb-1 font-medium">
                     Your Name
@@ -119,5 +137,5 @@ export default function Contact() {
 
       <Footer />
     </div>
-  )
+  );
 }
