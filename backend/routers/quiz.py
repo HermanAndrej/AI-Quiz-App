@@ -11,7 +11,7 @@ from models.quiz import Quiz, Question
 from models.user import User
 from models.quiz_result import QuizResult
 from auth.deps import get_current_user_id, get_current_user
-from services.quiz_service import get_quiz_by_id, submit_quiz_logic, get_quiz_result_logic, get_recent_quiz_results_by_user_id, get_recent_quizzes_by_user
+from services.quiz_service import get_quiz_by_id, submit_quiz_logic, get_quiz_result_logic, get_recent_quiz_results_by_user_id, get_recent_quizzes_by_user, get_quiz_history_with_details
 
 router = APIRouter(prefix="/quiz", tags=["quiz"])
 
@@ -69,3 +69,9 @@ async def get_quiz_result(quiz_id: int, user: User = Depends(get_current_user)) 
 @router.get("/result/recent/{n}", response_model=list[QuizResult])
 async def get_recent_quiz_results(n: int, current_user: User = Depends(get_current_user)) -> list[QuizResult]:
     return await get_recent_quiz_results_by_user_id(current_user.user_id, n)
+
+# Enhanced history endpoints
+@router.get("/history/{limit}")
+async def get_quiz_history(limit: int = 10, current_user: User = Depends(get_current_user)):
+    """Get comprehensive quiz history with quiz details."""
+    return await get_quiz_history_with_details(current_user.user_id, limit)

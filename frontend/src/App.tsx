@@ -6,6 +6,7 @@ import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Quiz from "./pages/Quiz"
 import Profile from "./pages/Profile"
+import History from "./pages/History"
 import ProtectedRoute from "@/components/ProtectedRoute"
 
 export default function App() {
@@ -24,6 +25,11 @@ export default function App() {
       <Route path="/profile" element={
         <ProtectedRoute>
           <Profile />
+        </ProtectedRoute>
+      } />
+      <Route path="/history" element={
+        <ProtectedRoute>
+          <History />
         </ProtectedRoute>
       } />
     </Routes>

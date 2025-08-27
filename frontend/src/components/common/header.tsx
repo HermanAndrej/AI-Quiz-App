@@ -60,6 +60,7 @@ export default function Header() {
                 ...(loggedIn
                   ? [
                       { href: "/quiz", label: "Quiz" },
+                      { href: "/history", label: "History" },
                       { href: "/profile", label: "Profile" },
                     ]
                   : []),
@@ -141,6 +142,7 @@ export default function Header() {
                 ...(loggedIn
                   ? [
                       { href: "/quiz", label: "Quiz" },
+                      { href: "/history", label: "History" },
                       { href: "/profile", label: "Profile" },
                     ]
                   : []),

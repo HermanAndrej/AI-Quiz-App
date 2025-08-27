@@ -1,6 +1,7 @@
 from models.quiz import Quiz
 from models.quiz_result import QuizResult
 from fastapi import HTTPException
+from typing import List, Dict, Any
 
 async def get_quiz_by_id(quiz_id: int) -> Quiz:
     quiz = await Quiz.find_one(Quiz.quiz_id == quiz_id)
@@ -37,3 +38,22 @@ async def get_recent_quizzes_by_user(user_id: str, n: int):
     ).sort(
         -Quiz.created_at  # descending = most recent first
     ).limit(n).to_list()
+
+# Enhanced history functions
+async def get_quiz_history_with_details(user_id: str, limit: int = 10) -> List[Dict[str, Any]]:
+    """Get quiz results with associated quiz details for comprehensive history."""
+    quiz_results = await QuizResult.find(
+        QuizResult.user_id == user_id
+    ).sort(-QuizResult.created_at).limit(limit).to_list()
+    
+    history = []
+    for result in quiz_results:
+        quiz = await get_quiz_by_id(result.quiz_id)
+        history.append({
+            "result": result,
+            "quiz": quiz,
+            "percentage": result.score,
+            "completed_at": result.created_at
+        })
+    
+    return history

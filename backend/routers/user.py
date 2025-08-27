@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status, Depends
-from services.user_service import get_basic_user_stats
+from services.user_service import get_basic_user_stats, get_comprehensive_user_statistics
 from schemas.user import UserReadResponse
 from auth.deps import get_current_user
 from models.user import User
@@ -27,3 +27,8 @@ async def user_basic_stats(user_id: int):
         "highest_score": stats["highest_score"],
         "lowest_score": stats["lowest_score"]
     }
+
+@router.get("/statistics")
+async def get_current_user_statistics(current_user: User = Depends(get_current_user)):
+    """Get comprehensive quiz statistics for the current user."""
+    return await get_comprehensive_user_statistics(current_user.user_id)

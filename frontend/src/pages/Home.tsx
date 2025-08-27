@@ -107,7 +107,7 @@ export default function Home() {
               Ready to continue your learning journey?
             </motion.p>
             <motion.div
-              className="mt-6 flex justify-center gap-4"
+              className="mt-6 flex justify-center gap-4 flex-wrap"
               variants={fadeUp}
               custom={4}
             >
@@ -115,7 +115,10 @@ export default function Home() {
                 <Link to="/quiz">Take a Quiz</Link>
               </Button>
               <Button variant="outline" asChild size="lg">
-                <Link to="/profile">View Profile</Link>
+                <Link to="/history">View History</Link>
+              </Button>
+              <Button variant="outline" asChild size="lg">
+                <Link to="/profile">Profile</Link>
               </Button>
             </motion.div>
           </motion.section>
