@@ -17,11 +17,15 @@ export default function Contact() {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
+    console.log("🔥 FORM SUBMIT TRIGGERED!"); // Basic test
     e.preventDefault();
+    console.log("🔥 preventDefault() called");
+    
     if (!formRef.current) {
       console.log("❌ EmailJS Debug: Form ref is null");
       return;
     }
+    console.log("✅ Form ref exists:", formRef.current);
 
     console.log("🚀 EmailJS Debug: Starting form submission");
     console.log("📝 EmailJS Debug: Form data:", {
@@ -157,7 +161,11 @@ export default function Contact() {
                   />
                 </div>
 
-                <Button type="submit" className="w-full">
+                <Button 
+                  type="submit" 
+                  className="w-full"
+                  onClick={() => console.log("🔥 BUTTON CLICKED!")}
+                >
                   Send Message
                 </Button>
               </form>
