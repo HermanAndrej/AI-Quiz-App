@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, Depends
-from services.user_service import get_basic_user_stats, get_comprehensive_user_statistics
-from schemas.user import UserReadResponse
+from services.user_service import get_basic_user_stats, get_comprehensive_user_statistics, change_user_password, update_user_profile
+from schemas.user import UserReadResponse, ChangePasswordRequest, ChangePasswordResponse, UpdateProfileRequest, UpdateProfileResponse
 from auth.deps import get_current_user
 from models.user import User
 
@@ -32,3 +32,38 @@ async def user_basic_stats(user_id: int):
 async def get_current_user_statistics(current_user: User = Depends(get_current_user)):
     """Get comprehensive quiz statistics for the current user."""
     return await get_comprehensive_user_statistics(current_user.user_id)
+
+@router.post("/change-password", response_model=ChangePasswordResponse)
+async def change_password(
+    request: ChangePasswordRequest,
+    current_user: User = Depends(get_current_user)
+):
+    """Change user password."""
+    success = await change_user_password(
+        current_user.user_id,
+        request.current_password,
+        request.new_password
+    )
+    if success:
+        return ChangePasswordResponse(message="Password changed successfully")
+
+@router.put("/profile", response_model=UpdateProfileResponse)
+async def update_profile(
+    request: UpdateProfileRequest,
+    current_user: User = Depends(get_current_user)
+):
+    """Update user profile information."""
+    updated_user = await update_user_profile(
+        current_user.user_id,
+        request.username,
+        request.email
+    )
+    return UpdateProfileResponse(
+        message="Profile updated successfully",
+        user=UserReadResponse(
+            user_id=updated_user.user_id,
+            email=updated_user.email,
+            username=updated_user.username,
+            joined_at=updated_user.joined_at
+        )
+    )

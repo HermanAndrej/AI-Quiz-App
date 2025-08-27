@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/common/header";
 import Footer from "@/components/common/footer";
+import ProfileSettings from "@/components/ProfileSettings";
 import { getValidAuthToken, removeAuthToken } from "@/lib/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { User, Mail, Calendar, Trophy, BookOpen, Settings, LogOut, Edit } from "lucide-react";
@@ -21,6 +22,7 @@ export default function Profile() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showSettings, setShowSettings] = useState(false);
 
   // Redirect to login if not logged in or token invalid
   useEffect(() => {
@@ -58,6 +60,10 @@ export default function Profile() {
   const handleLogout = () => {
     removeAuthToken();
     navigate("/");
+  };
+
+  const handleProfileUpdate = (updatedProfile: UserProfile) => {
+    setProfile(updatedProfile);
   };
 
   const getMembershipDuration = (joinedAt: string) => {
@@ -185,9 +191,9 @@ export default function Profile() {
                         </div>
                       </div>
 
-                      <Button variant="outline" className="w-full" disabled>
+                      <Button variant="outline" className="w-full" onClick={() => setShowSettings(true)}>
                         <Edit className="w-4 h-4 mr-2" />
-                        Edit Profile (Coming Soon)
+                        Edit Profile
                       </Button>
                     </CardContent>
                   </Card>
@@ -225,10 +231,10 @@ export default function Profile() {
                         variant="outline" 
                         className="w-full justify-start" 
                         size="lg"
-                        disabled
+                        onClick={() => setShowSettings(true)}
                       >
                         <Settings className="w-5 h-5 mr-3" />
-                        Account Settings (Coming Soon)
+                        Account Settings
                       </Button>
                       
                       <div className="pt-2 border-t">
@@ -277,6 +283,15 @@ export default function Profile() {
             </>
           )}
         </motion.div>
+
+        {/* Profile Settings Modal */}
+        {showSettings && profile && (
+          <ProfileSettings
+            profile={profile}
+            onClose={() => setShowSettings(false)}
+            onProfileUpdate={handleProfileUpdate}
+          />
+        )}
       </main>
       <Footer />
     </div>
