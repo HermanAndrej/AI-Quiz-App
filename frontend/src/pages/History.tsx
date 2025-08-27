@@ -202,9 +202,6 @@ export default function History() {
                           <p className={`text-2xl font-bold ${getScoreColor(item.result.score)}`}>
                             {item.result.score}%
                           </p>
-                          <p className="text-sm text-muted-foreground">
-                            {item.result.score}/{item.result.total_questions * 10} points
-                          </p>
                         </div>
                       </div>
                     </CardHeader>
