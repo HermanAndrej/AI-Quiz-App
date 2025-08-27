@@ -33,8 +33,19 @@ export default function Home() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const loggedIn = isLoggedIn();
-  console.log("🏠 Home component loaded");
+  const [loggedIn, setLoggedIn] = useState(false);
+  
+  // Check login status on component mount and when needed
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const loginStatus = isLoggedIn();
+      console.log("🔐 Login status check:", loginStatus);
+      setLoggedIn(loginStatus);
+      return loginStatus;
+    };
+    
+    checkLoginStatus();
+  }, []);
 
   useEffect(() => {
     if (!loggedIn) {
@@ -194,7 +205,7 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* 🟢 Final CTA Section - Only for visitors */}
+        {/* CTA Section (visitor only)*/}
         {!loggedIn && (
           <motion.section
             className="py-24 bg-muted/40 border-t"
@@ -234,6 +245,7 @@ export default function Home() {
             </div>
           </motion.section>
         )}
+        {/* Debug: CTA visibility - loggedIn: {loggedIn.toString()} */}
       </main>
       <Footer />
     </div>
