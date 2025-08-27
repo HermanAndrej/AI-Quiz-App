@@ -6,19 +6,29 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getValidAuthToken } from "@/lib/auth";
-import { Calendar, Trophy, Target, BookOpen, TrendingUp } from "lucide-react";
+import { Calendar, Trophy, Target, BookOpen, TrendingUp, Eye } from "lucide-react";
+import QuizReview from "@/components/QuizReview";
+
+interface Question {
+  question_id: number;
+  question_text: string;
+  options: Record<string, string>;
+  correct_option: string;
+}
 
 interface QuizHistory {
   result: {
     quiz_id: number;
     score: number;
     total_questions: number;
+    submitted_answers: Record<string, string>;
     created_at: string;
   };
   quiz: {
     topic: string;
     difficulty: string;
     number_of_questions: number;
+    questions: Question[];
   };
   percentage: number;
   completed_at: string;
@@ -39,6 +49,7 @@ export default function History() {
   const [stats, setStats] = useState<QuizStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedQuiz, setSelectedQuiz] = useState<QuizHistory | null>(null);
 
   useEffect(() => {
     fetchQuizData();
@@ -202,6 +213,15 @@ export default function History() {
                           <p className={`text-2xl font-bold ${getScoreColor(item.result.score)}`}>
                             {item.result.score}%
                           </p>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="mt-2"
+                            onClick={() => setSelectedQuiz(item)}
+                          >
+                            <Eye className="w-4 h-4 mr-1" />
+                            Review
+                          </Button>
                         </div>
                       </div>
                     </CardHeader>
@@ -225,6 +245,15 @@ export default function History() {
         </motion.div>
       </main>
       <Footer />
+      
+      {/* Quiz Review Modal */}
+      {selectedQuiz && (
+        <QuizReview
+          quiz={selectedQuiz.quiz}
+          result={selectedQuiz.result}
+          onClose={() => setSelectedQuiz(null)}
+        />
+      )}
     </div>
   );
 }
