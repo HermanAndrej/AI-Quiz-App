@@ -194,44 +194,46 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* 🟢 Final CTA Section */}
-        <motion.section
-          className="py-24 bg-muted/40 border-t"
-          initial="hidden"
-          animate="visible"
-          variants={fadeUp}
-          custom={10}
-        >
-          <div className="container mx-auto px-4 text-center">
-            <motion.h2
-              className="text-3xl sm:text-4xl font-bold tracking-tight mb-4"
-              variants={fadeUp}
-              custom={11}
-            >
-              Ready to start your journey?
-            </motion.h2>
-            <motion.p
-              className="text-muted-foreground text-lg max-w-xl mx-auto mb-8"
-              variants={fadeUp}
-              custom={12}
-            >
-              Sign up now and experience the smartest way to learn with
-              AI-powered quizzes tailored just for you.
-            </motion.p>
-            <motion.div
-              className="flex justify-center gap-4"
-              variants={fadeUp}
-              custom={13}
-            >
-              <Button size="lg" asChild>
-                <Link to="/register">Create Your Account</Link>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link to="/about">See How It Works</Link>
-              </Button>
-            </motion.div>
-          </div>
-        </motion.section>
+        {/* 🟢 Final CTA Section - Only for visitors */}
+        {!loggedIn && (
+          <motion.section
+            className="py-24 bg-muted/40 border-t"
+            initial="hidden"
+            animate="visible"
+            variants={fadeUp}
+            custom={10}
+          >
+            <div className="container mx-auto px-4 text-center">
+              <motion.h2
+                className="text-3xl sm:text-4xl font-bold tracking-tight mb-4"
+                variants={fadeUp}
+                custom={11}
+              >
+                Ready to start your journey?
+              </motion.h2>
+              <motion.p
+                className="text-muted-foreground text-lg max-w-xl mx-auto mb-8"
+                variants={fadeUp}
+                custom={12}
+              >
+                Sign up now and experience the smartest way to learn with
+                AI-powered quizzes tailored just for you.
+              </motion.p>
+              <motion.div
+                className="flex justify-center gap-4"
+                variants={fadeUp}
+                custom={13}
+              >
+                <Button size="lg" asChild>
+                  <Link to="/register">Create Your Account</Link>
+                </Button>
+                <Button variant="outline" size="lg" asChild>
+                  <Link to="/about">See How It Works</Link>
+                </Button>
+              </motion.div>
+            </div>
+          </motion.section>
+        )}
       </main>
       <Footer />
     </div>
