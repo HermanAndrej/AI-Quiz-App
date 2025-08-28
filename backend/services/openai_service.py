@@ -47,7 +47,9 @@ async def generate_quiz_ai(topic: str, difficulty: str, number_of_questions: int
     response = await client.chat.completions.create(
         model="gpt-4o",
         messages=[{"role": "user", "content": prompt}],
-        response_format={"type": "json_object"}
+        response_format={"type": "json_object"},
+        temperature=1.2,
+        top_p=0.9
     )
 
     content = response.choices[0].message.content
