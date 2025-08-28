@@ -3,13 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { X, CheckCircle, XCircle, Clock } from "lucide-react";
-
-interface Question {
-  question_id: number;
-  question_text: string;
-  options: Record<string, string>;
-  correct_option: string;
-}
+import { getDifficultyColor, getScoreColor, formatQuizDate, formatDetailedDate } from "@/lib/quiz-utils";
+import type { Question } from "@/types";
 
 interface QuizReviewProps {
   quiz: {
@@ -28,20 +23,6 @@ interface QuizReviewProps {
 }
 
 export default function QuizReview({ quiz, result, onClose }: QuizReviewProps) {
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty.toLowerCase()) {
-      case "easy": return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
-      case "medium": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
-      case "hard": return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400";
-      default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400";
-    }
-  };
-
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-600";
-    if (score >= 60) return "text-yellow-600";
-    return "text-red-600";
-  };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 overflow-y-auto">
@@ -66,13 +47,7 @@ export default function QuizReview({ quiz, result, onClose }: QuizReviewProps) {
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground">
-                      {new Date(result.created_at).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
+                      {formatQuizDate(result.created_at)}
                     </span>
                   </div>
                 </div>
@@ -165,14 +140,7 @@ export default function QuizReview({ quiz, result, onClose }: QuizReviewProps) {
             
             <div className="mt-8 p-4 bg-muted/30 rounded-lg text-center">
               <p className="text-sm text-muted-foreground">
-                Quiz completed on {new Date(result.created_at).toLocaleDateString('en-US', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })}
+                Quiz completed on {formatDetailedDate(result.created_at)}
               </p>
             </div>
           </CardContent>

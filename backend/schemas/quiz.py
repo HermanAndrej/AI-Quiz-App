@@ -9,20 +9,8 @@ class QuizGenerateRequest(BaseModel):
     difficulty: str
     number_of_questions: int = Field(..., gt=0, le=10)
 
-class QuestionOptions(BaseModel):
-    a: str
-    b: str
-    c: str
-    d: str
-
-class QuizQuestion(BaseModel):
-    question_id: int
-    question_text: str
-    options: QuestionOptions
-    correct_option: str
-
 class QuizGenerateResponse(BaseModel):
-    questions: List[QuizQuestion]
+    questions: List[Question]
     created_at: datetime
     quiz_id: int
     created_by: int  # user_id of the creator

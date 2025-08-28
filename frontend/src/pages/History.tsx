@@ -5,44 +5,11 @@ import Footer from "@/components/common/footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { getValidAuthToken } from "@/lib/auth";
 import { Calendar, Trophy, Target, BookOpen, TrendingUp, Eye } from "lucide-react";
 import QuizReview from "@/components/QuizReview";
-
-interface Question {
-  question_id: number;
-  question_text: string;
-  options: Record<string, string>;
-  correct_option: string;
-}
-
-interface QuizHistory {
-  result: {
-    quiz_id: number;
-    score: number;
-    total_questions: number;
-    submitted_answers: Record<string, string>;
-    created_at: string;
-  };
-  quiz: {
-    topic: string;
-    difficulty: string;
-    number_of_questions: number;
-    questions: Question[];
-  };
-  percentage: number;
-  completed_at: string;
-}
-
-interface QuizStats {
-  total_quizzes: number;
-  average_score: number;
-  best_score: number;
-  total_questions_answered: number;
-  difficulty_breakdown: Record<string, { count: number; avg_score: number }>;
-  topic_breakdown: Record<string, { count: number; avg_score: number }>;
-  recent_activity: number;
-}
+import { getDifficultyColor, getScoreColor, formatQuizDate } from "@/lib/quiz-utils";
+import { quizApi, userApi } from "@/lib/api";
+import type { QuizHistory, QuizStats } from "@/types";
 
 export default function History() {
   const [history, setHistory] = useState<QuizHistory[]>([]);
@@ -56,30 +23,12 @@ export default function History() {
   }, []);
 
   const fetchQuizData = async () => {
-    const token = getValidAuthToken();
-    if (!token) {
-      setError("Please log in to view your quiz history");
-      setLoading(false);
-      return;
-    }
-
     try {
-      // Fetch history and stats in parallel
-      const [historyResponse, statsResponse] = await Promise.all([
-        fetch("/api/quiz/history/20", {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        fetch("/api/user/statistics", {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
+      // Fetch history and stats in parallel using API utilities
+      const [historyData, statsData] = await Promise.all([
+        quizApi.getHistory(20),
+        userApi.getStatistics(),
       ]);
-
-      if (!historyResponse.ok || !statsResponse.ok) {
-        throw new Error("Failed to fetch quiz data");
-      }
-
-      const historyData = await historyResponse.json();
-      const statsData = await statsResponse.json();
 
       setHistory(historyData);
       setStats(statsData);
@@ -88,21 +37,6 @@ export default function History() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty.toLowerCase()) {
-      case "easy": return "bg-green-100 text-green-800";
-      case "medium": return "bg-yellow-100 text-yellow-800";
-      case "hard": return "bg-red-100 text-red-800";
-      default: return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-600";
-    if (score >= 60) return "text-yellow-600";
-    return "text-red-600";
   };
 
   if (loading) {
@@ -228,13 +162,7 @@ export default function History() {
                     <CardContent>
                       <div className="flex items-center text-sm text-muted-foreground">
                         <Calendar className="w-4 h-4 mr-2" />
-                        {new Date(item.completed_at).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
+                        {formatQuizDate(item.completed_at)}
                       </div>
                     </CardContent>
                   </Card>
