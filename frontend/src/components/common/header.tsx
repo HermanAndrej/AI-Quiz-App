@@ -15,7 +15,6 @@ import {
 import { Link } from "react-router-dom";
 import { X } from "lucide-react";
 import { isLoggedIn, removeAuthToken } from "@/lib/auth";
-import { getNavigationItems } from "@/config/navigation";
 
 export default function Header() {
   const [, forceUpdate] = useState({});
