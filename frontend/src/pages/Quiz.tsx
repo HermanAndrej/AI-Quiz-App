@@ -119,7 +119,6 @@ export default function Quiz() {
       });
       if (!res.ok) throw new Error("Failed to submit quiz");
       const data = await res.json();
-      console.log("Quiz submit response:", data);
       setSubmitResult(data);
     } catch (err: any) {
       setError(err.message || "Unknown error");

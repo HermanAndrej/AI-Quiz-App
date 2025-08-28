@@ -17,35 +17,16 @@ export default function Contact() {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    console.log("🔥 FORM SUBMIT TRIGGERED!"); // Basic test
     e.preventDefault();
-    console.log("🔥 preventDefault() called");
     
     if (!formRef.current) {
-      console.log("❌ EmailJS Debug: Form ref is null");
       return;
     }
-    console.log("✅ Form ref exists:", formRef.current);
 
-    console.log("🚀 EmailJS Debug: Starting form submission");
-    console.log("📝 EmailJS Debug: Form data:", {
-      name: form.name,
-      email: form.email,
-      messageLength: form.message.length
-    });
-    
     // Debug environment variables
     const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
     const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
     const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-    
-    console.log("🔑 EmailJS Debug: Environment check:", {
-      serviceId: serviceId ? "✅ Present" : "❌ Missing",
-      templateId: templateId ? "✅ Present" : "❌ Missing", 
-      publicKey: publicKey ? "✅ Present" : "❌ Missing"
-    });
-
-    console.log("📤 EmailJS Debug: Sending email...");
 
     emailjs
       .sendForm(
@@ -54,20 +35,11 @@ export default function Contact() {
         formRef.current,
         publicKey
       )
-      .then((result) => {
-        console.log("✅ EmailJS Debug: Email sent successfully!", result);
+      .then(() => {
         setSubmitted(true);
         setForm({ name: "", email: "", message: "" }); // clear form
-        console.log("🧹 EmailJS Debug: Form cleared");
       })
-      .catch((err) => {
-        console.error("❌ EmailJS Debug: Email failed to send:", err);
-        console.error("❌ EmailJS Debug: Full error details:", {
-          name: err.name,
-          text: err.text,
-          message: err.message,
-          status: err.status
-        });
+      .catch(() => {
         alert("Failed to send message. Please try again.");
       });
   };
@@ -164,7 +136,6 @@ export default function Contact() {
                 <Button 
                   type="submit" 
                   className="w-full"
-                  onClick={() => console.log("🔥 BUTTON CLICKED!")}
                 >
                   Send Message
                 </Button>

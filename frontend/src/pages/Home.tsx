@@ -29,7 +29,6 @@ type UserProfile = {
 };
 
 export default function Home() {
-  console.log("🏠 Home component loaded");
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +38,6 @@ export default function Home() {
   useEffect(() => {
     const checkLoginStatus = () => {
       const loginStatus = isLoggedIn();
-      console.log("🔐 Login status check:", loginStatus);
       setLoggedIn(loginStatus);
       return loginStatus;
     };

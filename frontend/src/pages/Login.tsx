@@ -8,7 +8,6 @@ import Header from "@/components/common/header"
 import Footer from "@/components/common/footer"
 
 export default function Login() {
-  console.log("Login component loaded");
   const [form, setForm] = useState({ email: "", password: "" })
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,33 +18,24 @@ export default function Login() {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log("handleSubmit called");
     e.preventDefault()
     setLoading(true);
     setError(null);
     try {
       const requestBody = JSON.stringify(form);
       const requestHeaders = { "Content-Type": "application/json" };
-      console.log("[LOGIN] Sending request:", {
-        url: "/api/auth/login",
-        method: "POST",
-        headers: requestHeaders,
-        body: requestBody,
-      });
-      console.log("Register: Sending request...");
+      
       const res = await fetch("https://andrejherman.live/api/auth/login", {
         method: "POST",
         headers: requestHeaders,
         body: requestBody,
       });
-      console.log("Register: Response received", res);
-      console.log("[LOGIN] Response status:", res.status);
+      
       let data;
       try {
         data = await res.json();
-        console.log("[LOGIN] Response body:", data);
       } catch (jsonErr) {
-        console.log("[LOGIN] Failed to parse JSON response");
+        // Failed to parse JSON response
       }
       if (!res.ok) {
         throw new Error((data && data.detail) || "Login failed");

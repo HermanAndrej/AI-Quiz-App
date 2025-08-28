@@ -1,7 +1,3 @@
-/**
- * Shared type definitions for the application
- */
-
 export interface Question {
   question_id: number;
   question_text: string;

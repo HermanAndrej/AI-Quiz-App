@@ -10,9 +10,9 @@ async def init_db():
 
     try:
         await client.admin.command("ping")
-        print("✅ Connected to MongoDB Atlas")
+        # Connected to MongoDB Atlas
     except Exception as e:
-        print("❌ MongoDB connection failed:", e)
+        # MongoDB connection failed
         raise e
 
     db = client[settings.DATABASE_NAME]
