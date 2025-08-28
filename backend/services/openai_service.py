@@ -48,7 +48,7 @@ async def generate_quiz_ai(topic: str, difficulty: str, number_of_questions: int
         model="gpt-4o",
         messages=[{"role": "user", "content": prompt}],
         response_format={"type": "json_object"},
-        temperature=1.2,
+        temperature=1.6,
         top_p=0.9
     )
 
