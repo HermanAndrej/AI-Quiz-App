@@ -37,10 +37,10 @@ async def generate_quiz_ai(topic: str, difficulty: str, number_of_questions: int
     The correct_option must be one of: "a", "b", "c", or "d".
     
     For {difficulty} difficulty:
-    - Easy: Basic concepts.
-    - Medium: Some deeper understanding.
-    - Hard: Comprehensive and challenging.
-    
+    - Easy: Basic concepts, but ensure the questions are not the most obvious ones, include slightly different contexts, and make each question unique.
+    - Medium: Some deeper understanding, requiring the user to apply concepts in new ways.
+    - Hard: Comprehensive and challenging, testing the user's knowledge to the fullest extent.
+
     Ensure factual accuracy and clarity.
     """
 
