@@ -1,0 +1,55 @@
+{
+	"id": "ai-quiz-app-environment",
+	"name": "AI Quiz App Environment",
+	"values": [
+		{
+			"key": "base_url",
+			"value": "https://andrejherman.live/api",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "local_url",
+			"value": "http://localhost:8000",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "secret",
+			"enabled": true
+		},
+		{
+			"key": "user_id",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "quiz_id",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "test_email",
+			"value": "cicd_user_1756495269@example.com",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "test_username",
+			"value": "cicd_user_1756495269",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "test_password",
+			"value": "cicd_password_123",
+			"type": "secret",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment"
+}
