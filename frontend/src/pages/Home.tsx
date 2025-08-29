@@ -79,99 +79,108 @@ export default function Home() {
   }, [loggedIn]);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <Header />
       <main className="flex-grow">
         {loggedIn && !loading ? (
           <motion.section
-            className="py-20 text-center px-4"
+            className="py-20 text-center px-4 relative"
             initial="hidden"
             animate="visible"
             variants={fadeUp}
             custom={1}
           >
-            <motion.h1
-              className="text-4xl sm:text-5xl font-bold tracking-tight"
-              variants={fadeUp}
-              custom={2}
-            >
-              {profile ? `Welcome back, ${profile.username}!` : error}
-            </motion.h1>
-            <motion.p
-              className="mt-4 text-muted-foreground max-w-2xl mx-auto text-lg"
-              variants={fadeUp}
-              custom={3}
-            >
-              Ready to continue your learning journey?
-            </motion.p>
-            <motion.div
-              className="mt-6 flex justify-center gap-4 flex-wrap"
-              variants={fadeUp}
-              custom={4}
-            >
-              <Button asChild size="lg">
-                <Link to="/quiz">Take a Quiz</Link>
-              </Button>
-              <Button variant="outline" asChild size="lg">
-                <Link to="/history">View History</Link>
-              </Button>
-              <Button variant="outline" asChild size="lg">
-                <Link to="/profile">Profile</Link>
-              </Button>
-            </motion.div>
-          </motion.section>
-        ) : (
-          <>
-            {/* 🟢 Hero Section for guests */}
-            <motion.section
-              className="py-20 text-center px-4"
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              custom={1}
-            >
+            {/* Background decoration */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-purple/5 rounded-3xl mx-4" />
+            <div className="relative">
               <motion.h1
-                className="text-4xl sm:text-5xl font-bold tracking-tight"
+                className="text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent"
                 variants={fadeUp}
                 custom={2}
               >
-                Learn Smarter with AI-Powered Quizzes
+                {profile ? `Welcome back, ${profile.username}!` : error}
               </motion.h1>
               <motion.p
                 className="mt-4 text-muted-foreground max-w-2xl mx-auto text-lg"
                 variants={fadeUp}
                 custom={3}
               >
-                Personalized quizzes that adapt to your knowledge level. Track
-                progress, boost retention, and have fun while learning.
+                Ready to continue your learning journey?
               </motion.p>
               <motion.div
-                className="mt-6 flex justify-center gap-4"
+                className="mt-8 flex justify-center gap-4 flex-wrap"
                 variants={fadeUp}
                 custom={4}
               >
-                <Button asChild size="lg">
-                  <Link to="/register">Get Started</Link>
+                <Button asChild size="lg" className="shadow-2xl">
+                  <Link to="/quiz">Take a Quiz</Link>
                 </Button>
                 <Button variant="outline" asChild size="lg">
-                  <Link to="/about">Learn More</Link>
+                  <Link to="/history">View History</Link>
+                </Button>
+                <Button variant="outline" asChild size="lg">
+                  <Link to="/profile">Profile</Link>
                 </Button>
               </motion.div>
+            </div>
+          </motion.section>
+        ) : (
+          <>
+            {/* Hero Section for guests */}
+            <motion.section
+              className="py-20 text-center px-4 relative"
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              custom={1}
+            >
+              {/* Background decoration */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-purple/5 to-pink/10 rounded-3xl mx-4" />
+              <div className="relative">
+                <motion.h1
+                  className="text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent"
+                  variants={fadeUp}
+                  custom={2}
+                >
+                  Learn Smarter with AI-Powered Quizzes
+                </motion.h1>
+                <motion.p
+                  className="mt-6 text-muted-foreground max-w-2xl mx-auto text-lg"
+                  variants={fadeUp}
+                  custom={3}
+                >
+                  Personalized quizzes that adapt to your knowledge level. Track
+                  progress, boost retention, and have fun while learning.
+                </motion.p>
+                <motion.div
+                  className="mt-8 flex justify-center gap-4"
+                  variants={fadeUp}
+                  custom={4}
+                >
+                  <Button asChild size="lg" className="shadow-2xl">
+                    <Link to="/register">Get Started</Link>
+                  </Button>
+                  <Button variant="outline" asChild size="lg">
+                    <Link to="/about">Learn More</Link>
+                  </Button>
+                </motion.div>
+              </div>
             </motion.section>
           </>
         )}
 
-        {/* 🟢 Features Section */}
+        {/* Features Section */}
         <motion.section
-          className="py-16 bg-muted/40 px-4"
+          className="py-16 bg-gradient-to-br from-muted/30 via-muted/20 to-primary/5 px-4 relative"
           initial="hidden"
           animate="visible"
           variants={fadeUp}
           custom={5}
         >
-          <div className="container mx-auto text-center">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent" />
+          <div className="container mx-auto text-center relative">
             <motion.h2
-              className="text-2xl font-semibold mb-10"
+              className="text-3xl font-bold mb-12 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent"
               variants={fadeUp}
               custom={6}
             >

@@ -47,17 +47,19 @@ export default function Register() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <Header />
 
       <main className="flex-grow container mx-auto px-4 py-20 flex justify-center items-center">
         <motion.div
-          className="w-full max-w-md bg-muted/40 p-8 rounded-xl shadow-md"
+          className="w-full max-w-md bg-card/50 backdrop-blur-md border border-border/50 p-8 rounded-xl shadow-2xl ring-1 ring-border/10"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-2xl font-bold mb-6 text-center">Create an Account</h1>
+          <h1 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            Join AI Quiz
+          </h1>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="relative">
               <User className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />

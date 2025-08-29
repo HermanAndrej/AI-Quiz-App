@@ -13,7 +13,7 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { Link } from "react-router-dom";
-import { X } from "lucide-react";
+import { X, Sparkles, LogOut, User, Menu } from "lucide-react";
 import { isLoggedIn, removeAuthToken } from "@/lib/auth";
 
 export default function Header() {
@@ -40,19 +40,23 @@ export default function Header() {
   };
 
   return (
-    <header
-      className={`sticky top-0 z-50 border-b bg-background/80 backdrop-blur shadow-sm transition-all duration-500 ease-in-out`}
-    >
+    <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur-md shadow-lg transition-all duration-500 ease-in-out">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* LOGO */}
-        <Link to="/" className="text-2xl font-bold tracking-tight text-primary">
+        {/* Logo */}
+        <Link 
+          to="/" 
+          className="flex items-center gap-2 text-2xl font-bold tracking-tight text-primary hover:scale-105 transition-transform duration-200"
+        >
+          <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-primary to-purple-600 rounded-lg">
+            <Sparkles className="w-5 h-5 text-white" />
+          </div>
           AI<span className="text-muted-foreground">Quiz</span>
         </Link>
 
-        {/* DESKTOP NAV */}
-        <nav className="hidden md:flex items-center gap-6">
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-2">
           <NavigationMenu>
-            <NavigationMenuList className="flex gap-6">
+            <NavigationMenuList className="flex gap-2">
               {[
                 { href: "/", label: "Home" },
                 { href: "/about", label: "About" },
@@ -69,7 +73,7 @@ export default function Header() {
                   <NavigationMenuLink asChild>
                     <Link
                       to={href}
-                      className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                      className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-primary hover:bg-accent/50 rounded-md transition-all duration-200 hover:scale-105"
                     >
                       {label}
                     </Link>
@@ -80,47 +84,41 @@ export default function Header() {
           </NavigationMenu>
         </nav>
 
-        {/* DESKTOP BUTTONS */}
-        <div className="hidden md:flex items-center gap-2">
+        {/* Desktop Buttons */}
+        <div className="hidden md:flex items-center gap-3">
           {loggedIn ? (
-            <Button variant="outline" onClick={handleLogout}>
+            <Button variant="outline" onClick={handleLogout} className="hover:scale-105 transition-transform duration-200">
+              <LogOut className="w-4 h-4 mr-2" />
               Logout
             </Button>
           ) : (
             <>
-              <Button variant="ghost" asChild>
-                <Link to="/login">Login</Link>
+              <Button variant="ghost" asChild className="hover:scale-105 transition-transform duration-200">
+                <Link to="/login">
+                  <User className="w-4 h-4 mr-2" />
+                  Login
+                </Link>
               </Button>
-              <Button asChild>
-                <Link to="/register">Sign Up</Link>
+              <Button asChild className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/80 hover:to-purple-600/80 hover:scale-105 transition-all duration-200 shadow-lg">
+                <Link to="/register">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Sign Up
+                </Link>
               </Button>
             </>
           )}
         </div>
 
-        {/* MOBILE MENU */}
+        {/* Mobile Menu */}
         <Sheet>
           <SheetTrigger asChild>
             <Button
               variant="ghost"
               size="icon"
               aria-label="Open menu"
-              className="md:hidden"
+              className="md:hidden hover:scale-110 transition-transform duration-200"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
+              <Menu className="h-6 w-6" />
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="w-64 p-6">

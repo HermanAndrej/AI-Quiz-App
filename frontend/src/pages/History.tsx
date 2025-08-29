@@ -53,10 +53,13 @@ export default function History() {
 
   if (error) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
         <Header />
         <main className="flex-grow container mx-auto px-4 py-20 text-center">
-          <p className="text-red-600">{error}</p>
+          <Card className="w-full max-w-md mx-auto p-6 bg-gradient-to-br from-card/80 to-card/60">
+            <p className="text-red-600 mb-4">{error}</p>
+            <Button onClick={() => window.location.reload()}>Try Again</Button>
+          </Card>
         </main>
         <Footer />
       </div>
@@ -64,7 +67,7 @@ export default function History() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-8">
         <motion.div
@@ -72,7 +75,9 @@ export default function History() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-3xl font-bold mb-8">Quiz History</h1>
+          <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            Quiz History
+          </h1>
 
           {/* Statistics Overview */}
           {stats && stats.total_quizzes > 0 && (
