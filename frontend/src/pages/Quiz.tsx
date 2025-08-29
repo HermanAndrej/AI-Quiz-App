@@ -131,7 +131,7 @@ export default function Quiz() {
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-12 flex flex-col items-center">
-        <Card className="w-full max-w-xl p-8 mb-8 bg-gradient-to-br from-card/80 to-card/60">
+        <Card className="w-full max-w-xl p-8 mb-8">
           <h1 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
             Generate a Quiz
           </h1>
@@ -188,7 +188,7 @@ export default function Quiz() {
                 const correctAnswer = submitResult?.correct_answers?.[q.question_id];
                 const isCorrect = userAnswer === correctAnswer;
                 return (
-                  <Card key={q.question_id} className="mb-6 p-6 bg-gradient-to-br from-card/90 to-card/70">
+                  <Card key={q.question_id} className="mb-6 p-6">
                     <div className="font-semibold text-lg mb-4 text-foreground">
                       <span className="inline-flex items-center justify-center w-8 h-8 bg-gradient-to-r from-primary to-purple-600 text-white text-sm font-bold rounded-full mr-3">
                         {idx + 1}
@@ -197,20 +197,20 @@ export default function Quiz() {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {Object.entries(q.options).map(([key, val]) => {
-                        let highlight = "border-border/50 hover:border-primary/50 hover:bg-accent/50";
+                        let highlight = "border-border hover:border-primary/60 hover:bg-accent/30";
                         if (submitResult) {
                           if (key === userAnswer && isCorrect) {
-                            highlight = "bg-green-100 border-green-500 ring-2 ring-green-200";
+                            highlight = "bg-green-100 border-green-500";
                           } else if (key === userAnswer && !isCorrect) {
-                            highlight = "bg-red-100 border-red-500 ring-2 ring-red-200";
+                            highlight = "bg-red-100 border-red-500";
                           } else if (key === correctAnswer) {
-                            highlight = "bg-green-50 border-green-300 ring-1 ring-green-100";
+                            highlight = "bg-green-50 border-green-400";
                           }
                         }
                         return (
                           <label
                             key={key}
-                            className={`flex items-center gap-3 cursor-pointer border rounded-lg p-4 transition-all duration-200 hover:scale-[1.02] backdrop-blur-sm ${highlight}`}
+                            className={`flex items-center gap-3 cursor-pointer border rounded-lg p-4 transition-colors duration-200 ${highlight}`}
                           >
                             <input
                               type="radio"
