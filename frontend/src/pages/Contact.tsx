@@ -3,7 +3,7 @@ import Header from "@/components/common/header";
 import Footer from "@/components/common/footer";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Mail, MessageSquare, User } from "lucide-react";
+import { Mail, User } from "lucide-react";
 import emailjs from "@emailjs/browser";
 
 export default function Contact() {
