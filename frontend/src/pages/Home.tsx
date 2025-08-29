@@ -194,7 +194,7 @@ export default function Home() {
                 },
                 {
                   title: "Instant Feedback",
-                  desc: "See what you got right and where you can improve — instantly.",
+                  desc: "See what you got right and where you can improve instantly.",
                 },
                 {
                   title: "Track Your Progress",

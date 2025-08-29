@@ -47,7 +47,7 @@ export default function Header() {
           to="/" 
           className="flex items-center gap-2 text-2xl font-bold tracking-tight text-primary hover:scale-105 transition-transform duration-200"
         >
-          <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-primary to-purple-600 rounded-lg">
+          <div className="flex items-center justify-center w-8 h-8 bg-primary rounded-lg">
             <Sparkles className="w-5 h-5 text-white" />
           </div>
           AI<span className="text-muted-foreground">Quiz</span>
@@ -99,7 +99,7 @@ export default function Header() {
                   Login
                 </Link>
               </Button>
-              <Button asChild className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/80 hover:to-purple-600/80 hover:scale-105 transition-all duration-200 shadow-lg">
+              <Button asChild className="shadow-lg">
                 <Link to="/register">
                   <Sparkles className="w-4 h-4 mr-2" />
                   Sign Up

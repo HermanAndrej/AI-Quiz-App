@@ -108,7 +108,7 @@ export default function History() {
               
               <Card>
                 <CardContent className="p-4 text-center">
-                  <BookOpen className="w-8 h-8 mx-auto mb-2 text-purple-500" />
+                  <BookOpen className="w-8 h-8 mx-auto mb-2 text-primary" />
                   <p className="text-2xl font-bold">{stats.total_questions_answered}</p>
                   <p className="text-sm text-muted-foreground">Questions Answered</p>
                 </CardContent>

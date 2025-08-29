@@ -62,8 +62,7 @@ export default function Contact() {
               Have a question, feedback, or partnership idea? We’d love to hear from you. Fill out the form and our team will get back to you soon.
             </p>
             <div className="space-y-2 text-sm text-muted-foreground">
-              <p><Mail className="inline-block w-4 h-4 mr-2" /> support@aiquizapp.com</p>
-              <p><MessageSquare className="inline-block w-4 h-4 mr-2" /> Live chat coming soon!</p>
+              <p><Mail className="inline-block w-4 h-4 mr-2" /> andrej.herman@stu.ibu.edu.ba</p>
             </div>
           </div>
 

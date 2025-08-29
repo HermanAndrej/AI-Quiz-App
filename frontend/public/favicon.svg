@@ -1,0 +1,14 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with primary color -->
+  <rect width="32" height="32" rx="6" fill="hsl(var(--primary))"/>
+  
+  <!-- Sparkles icon in white -->
+  <g transform="translate(6, 6)">
+    <!-- Main sparkle -->
+    <path d="M12 1L14.5 8.5L22 11L14.5 13.5L12 21L9.5 13.5L2 11L9.5 8.5L12 1Z" fill="white"/>
+    
+    <!-- Small sparkles -->
+    <path d="M5 3L5.75 5.75L8.5 6.5L5.75 7.25L5 10L4.25 7.25L1.5 6.5L4.25 5.75L5 3Z" fill="white" opacity="0.8"/>
+    <path d="M18 4L18.5 6L20.5 6.5L18.5 7L18 9L17.5 7L15.5 6.5L17.5 6L18 4Z" fill="white" opacity="0.6"/>
+  </g>
+</svg>

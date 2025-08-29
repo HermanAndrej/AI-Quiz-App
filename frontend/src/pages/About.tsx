@@ -125,7 +125,7 @@ export default function About() {
                   value: "q2",
                   question: "Is there a mobile app available?",
                   answer:
-                    "Currently, AI Quiz App is a web-first experience optimized for mobile browsers. Native apps are planned for the future.",
+                    "Currently, AI Quiz App is a web-first experience optimized for mobile browsers.",
                 },
                 {
                   value: "q3",
@@ -137,7 +137,7 @@ export default function About() {
                   value: "q4",
                   question: "Is the app free to use?",
                   answer:
-                    "The core quiz features are free, with optional premium plans for extra content and personalized coaching.",
+                    "Yes, as long the API usage doesn't run out.",
                 },
               ].map(({ value, question, answer }, i) => (
                 <motion.div

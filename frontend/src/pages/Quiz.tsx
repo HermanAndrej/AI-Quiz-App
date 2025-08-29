@@ -190,7 +190,7 @@ export default function Quiz() {
                 return (
                   <Card key={q.question_id} className="mb-6 p-6">
                     <div className="font-semibold text-lg mb-4 text-foreground">
-                      <span className="inline-flex items-center justify-center w-8 h-8 bg-gradient-to-r from-primary to-purple-600 text-white text-sm font-bold rounded-full mr-3">
+                      <span className="inline-flex items-center justify-center w-8 h-8 bg-primary text-white text-sm font-bold rounded-full mr-3">
                         {idx + 1}
                       </span>
                       {q.question_text}
