@@ -37,9 +37,9 @@ async def generate_quiz_ai(topic: str, difficulty: str, number_of_questions: int
     The correct_option must be one of: "a", "b", "c", or "d".
     
     For {difficulty} difficulty:
-    - Easy: Basic concepts, but ensure the questions are not the most obvious ones, include slightly different contexts, and make each question unique.
-    - Medium: Some deeper understanding, requiring the user to apply concepts in new ways.
-    - Hard: Comprehensive and challenging, testing the user's knowledge to the fullest extent.
+    - Easy: Basic concepts, but ensure the questions are not the most obvious ones, include slightly different contexts, make each question unique, and vary the wording and examples as much as possible.
+    - Medium: Some deeper understanding, requiring the user to apply concepts in new ways. Cover different aspects of the topic rather than focusing on just one subcategory.
+    - Hard: Comprehensive and challenging, testing the user's knowledge to the fullest extent. Ensure the questions span multiple subcategories of the topic (e.g., if the topic is Biology, include genetics, ecology, physiology, etc.), not just one area.
 
     Ensure factual accuracy and clarity.
     """
