@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "ai-quiz-app-collection",
 		"name": "AI Quiz App API Tests",
-		"description": "Complete API test collection for the AI Quiz application",
+		"description": "API test collection for the AI Quiz application",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"auth": {
@@ -73,15 +73,15 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"// Always pass - this is just setup",
+									"// Setup test passes for both new user creation and existing user scenarios",
 									"pm.test(\"CI/CD test user setup completed\", function () {",
 									"    pm.expect(pm.response.code).to.be.oneOf([201, 400]);",
 									"});",
 									"",
 									"if (pm.response.code === 201) {",
-									"    console.log('✅ CI/CD test user created successfully');",
+									"    console.log('CI/CD test user created successfully');",
 									"} else if (pm.response.code === 400) {",
-									"    console.log('ℹ️ CI/CD test user already exists - ready to proceed');",
+									"    console.log('CI/CD test user already exists and is ready to proceed');",
 									"}"
 								],
 								"type": "text/javascript"
@@ -123,12 +123,12 @@
 									"    pm.test(\"New user registration successful\", function () {",
 									"        var jsonData = pm.response.json();",
 									"        pm.expect(jsonData).to.have.property('message');",
-									"        console.log('✅ New user registered successfully');",
+									"        console.log('New user registered successfully');",
 									"    });",
 									"} else if (pm.response.code === 400) {",
 									"    pm.test(\"User already exists (expected in CI/CD)\", function () {",
 									"        var jsonData = pm.response.json();",
-									"        console.log('ℹ️ User already exists, proceeding with login');",
+									"        console.log('User already exists, proceeding with login');",
 									"    });",
 									"}"
 								],
@@ -176,7 +176,7 @@
 									"        // Store access token in both collection and environment",
 									"        pm.collectionVariables.set('access_token', jsonData.access_token);",
 									"        pm.environment.set('access_token', jsonData.access_token);",
-									"        console.log('✅ Login successful, token stored in both collection and environment');",
+									"        console.log('Login successful, token stored in collection and environment');",
 									"    });",
 									"    ",
 									"    // Get user_id from /user/me after successful login",
@@ -191,13 +191,13 @@
 									"            if (!err && response.json()) {",
 									"                pm.collectionVariables.set('user_id', response.json().user_id);",
 									"                pm.environment.set('user_id', response.json().user_id);",
-									"                console.log('✅ User ID retrieved and stored in both collection and environment');",
+									"                console.log('User ID retrieved and stored in collection and environment');",
 									"            }",
 									"        });",
 									"    }, 100);",
 									"} else {",
 									"    pm.test(\"Login failed - using fallback for CI/CD\", function () {",
-									"        console.log('⚠️ Login failed. In CI/CD, you might want to use a known test account');",
+									"        console.log('Login failed. Verify test account credentials in environment');",
 									"        console.log('Response:', pm.response.text());",
 									"        // Set empty token to indicate auth failure",
 									"        pm.collectionVariables.set('access_token', '');",
@@ -289,7 +289,7 @@
 									"    });",
 									"} else if (pm.response.code === 400) {",
 									"    pm.test(\"Username conflict (expected in CI/CD)\", function () {",
-									"        console.log('ℹ️ Username already taken - expected in repeated CI/CD runs');",
+									"        console.log('Username already taken - expected in repeated CI/CD runs');",
 									"    });",
 									"}"
 								],
@@ -340,7 +340,7 @@
 									"    // Store quiz_id for other requests in both collection and environment",
 									"    pm.collectionVariables.set('quiz_id', jsonData.quiz_id);",
 									"    pm.environment.set('quiz_id', jsonData.quiz_id);",
-									"    console.log('✅ Quiz ID stored:', jsonData.quiz_id);",
+									"    console.log('Quiz ID stored:', jsonData.quiz_id);",
 									"});",
 									"",
 									"pm.test(\"Quiz has correct number of questions\", function () {",
@@ -391,7 +391,7 @@
 									"    });",
 									"} else {",
 									"    pm.test(\"Quiz not found (may be expected)\", function () {",
-									"        console.log('ℹ️ Quiz not found - check if quiz_id is set correctly');",
+									"        console.log('Quiz not found - verify quiz_id is set correctly');",
 									"        console.log('Current quiz_id:', pm.collectionVariables.get('quiz_id'));",
 									"    });",
 									"}"
@@ -420,7 +420,7 @@
 									"// Check if quiz_id is available",
 									"const quizId = pm.environment.get('quiz_id') || pm.collectionVariables.get('quiz_id');",
 									"if (!quizId || quizId === '') {",
-									"    console.log('Warning: quiz_id is empty. Make sure to run \"Generate Quiz\" first!');",
+									"    console.log('Notice: quiz_id is empty. The Generate Quiz test should run first');",
 									"    // Set a default quiz_id for testing",
 									"    pm.collectionVariables.set('quiz_id', 1);",
 									"    pm.environment.set('quiz_id', 1);",
@@ -465,7 +465,7 @@
 									"    });",
 									"} else {",
 									"    pm.test(\"Quiz submission failed (validation error)\", function () {",
-									"        console.log('ℹ️ Quiz submission validation failed - check quiz_id and answers format');",
+									"        console.log('Quiz submission validation failed - verify quiz_id and answers format');",
 									"        console.log('Response:', pm.response.text());",
 									"    });",
 									"}"
@@ -527,7 +527,7 @@
 					"    }",
 					"}",
 					"",
-					"console.log('Making request to: ' + pm.request.url);"
+					"console.log('Request URL: ' + pm.request.url);"
 				]
 			}
 		},
@@ -544,7 +544,7 @@
 					"// Handle authentication failures gracefully in CI/CD",
 					"if (pm.response.code === 401) {",
 					"    pm.test('Authentication failed - check login credentials', function () {",
-					"        console.log('⚠️ Authentication required for this endpoint');",
+					"        console.log('Authentication required for this endpoint');",
 					"        pm.expect(pm.response.code).to.equal(401);",
 					"    });",
 					"} else if (pm.response.headers.get('Content-Type')) {",
