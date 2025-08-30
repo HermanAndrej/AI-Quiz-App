@@ -66,11 +66,11 @@ async def get_comprehensive_user_statistics(user_id: str) -> Dict[str, Any]:
     # Calculate averages
     for diff_data in difficulty_stats.values():
         diff_data["avg_score"] = sum(diff_data["scores"]) // len(diff_data["scores"])
-        del diff_data["scores"]  # Clean up
+        del diff_data["scores"]
         
     for topic_data in topic_stats.values():
         topic_data["avg_score"] = sum(topic_data["scores"]) // len(topic_data["scores"])
-        del topic_data["scores"]  # Clean up
+        del topic_data["scores"]
     
     return {
         "total_quizzes": len(results),

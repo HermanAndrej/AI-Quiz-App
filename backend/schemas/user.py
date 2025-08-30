@@ -39,7 +39,3 @@ class UpdateProfileRequest(BaseModel):
 class UpdateProfileResponse(BaseModel):
     message: str
     user: UserReadResponse
-
-#class Token(BaseModel):
- #   access_token: str 
-  #  token_type: str

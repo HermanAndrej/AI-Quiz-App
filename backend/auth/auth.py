@@ -40,7 +40,7 @@ async def authenticate_user(user_data: UserLoginRequest) -> UserLoginResponse:
         raise HTTPException(status_code=401, detail="Invalid email or password!")
 
     token = create_access_token(
-        data={"sub": str(user.user_id)},  # Use your int id now!
+        data={"sub": str(user.user_id)},
         expires_delta=timedelta(minutes=30)
     )
 

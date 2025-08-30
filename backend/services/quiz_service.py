@@ -29,17 +29,16 @@ async def get_recent_quiz_results_by_user_id(user_id: str, n: int):
     return await QuizResult.find(
         QuizResult.user_id == user_id
     ).sort(
-        -QuizResult.created_at  # descending = most recent first
+        -QuizResult.created_at  # descending
     ).limit(n).to_list()
 
 async def get_recent_quizzes_by_user(user_id: str, n: int):
     return await Quiz.find(
         Quiz.created_by == user_id
     ).sort(
-        -Quiz.created_at  # descending = most recent first
+        -Quiz.created_at
     ).limit(n).to_list()
 
-# Enhanced history functions
 async def get_quiz_history_with_details(user_id: str, limit: int = 10) -> List[Dict[str, Any]]:
     """Get quiz results with associated quiz details for comprehensive history."""
     quiz_results = await QuizResult.find(

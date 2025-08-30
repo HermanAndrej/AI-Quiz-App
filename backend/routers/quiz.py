@@ -70,7 +70,6 @@ async def get_quiz_result(quiz_id: int, user: User = Depends(get_current_user)) 
 async def get_recent_quiz_results(n: int, current_user: User = Depends(get_current_user)) -> list[QuizResult]:
     return await get_recent_quiz_results_by_user_id(current_user.user_id, n)
 
-# Enhanced history endpoints
 @router.get("/history/{limit}")
 async def get_quiz_history(limit: int = 10, current_user: User = Depends(get_current_user)):
     """Get comprehensive quiz history with quiz details."""

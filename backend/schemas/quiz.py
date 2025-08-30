@@ -4,7 +4,6 @@ from datetime import datetime
 from models.quiz import Question
 
 class QuizGenerateRequest(BaseModel):
-#    user_id: int
     topic: str
     difficulty: str
     number_of_questions: int = Field(..., gt=0, le=10)
