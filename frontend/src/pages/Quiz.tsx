@@ -135,37 +135,58 @@ export default function Quiz() {
           <h1 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
             Generate a Quiz
           </h1>
-          <form onSubmit={handleGenerate} className="space-y-5">
-            <Input
-              name="topic"
-              value={form.topic}
-              onChange={handleFormChange}
-              placeholder="Quiz Topic (e.g. JavaScript, History)"
-              required
-              disabled={loading}
-            />
-            <select
-              name="difficulty"
-              value={form.difficulty}
-              onChange={handleFormChange}
-              className="w-full border border-input/60 rounded-md p-2 bg-background/50 backdrop-blur-sm shadow-md transition-all duration-200 focus:border-ring focus:ring-ring/50 focus:ring-[3px] focus:shadow-lg hover:border-ring/60 hover:shadow-lg ring-1 ring-border/10"
-              disabled={loading}
-            >
-              {DIFFICULTIES.map((d) => (
-                <option key={d} value={d}>{d}</option>
-              ))}
-            </select>
-            <Input
-              type="number"
-              name="number_of_questions"
-              min={1}
-              max={10}
-              value={form.number_of_questions}
-              onChange={handleFormChange}
-              placeholder="Number of Questions"
-              required
-              disabled={loading}
-            />
+          <form onSubmit={handleGenerate} className="space-y-6">
+            <div className="space-y-2">
+              <label htmlFor="topic" className="text-sm font-medium text-foreground">
+                Quiz Topic
+              </label>
+              <Input
+                id="topic"
+                name="topic"
+                value={form.topic}
+                onChange={handleFormChange}
+                placeholder="e.g. JavaScript, History, Science"
+                required
+                disabled={loading}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <label htmlFor="difficulty" className="text-sm font-medium text-foreground">
+                Difficulty Level
+              </label>
+              <select
+                id="difficulty"
+                name="difficulty"
+                value={form.difficulty}
+                onChange={handleFormChange}
+                className="w-full border border-input/60 rounded-md p-2 bg-background/50 backdrop-blur-sm shadow-md transition-all duration-200 focus:border-ring focus:ring-ring/50 focus:ring-[3px] focus:shadow-lg hover:border-ring/60 hover:shadow-lg ring-1 ring-border/10"
+                disabled={loading}
+              >
+                {DIFFICULTIES.map((d) => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div className="space-y-2">
+              <label htmlFor="number_of_questions" className="text-sm font-medium text-foreground">
+                Number of Questions
+              </label>
+              <Input
+                id="number_of_questions"
+                type="number"
+                name="number_of_questions"
+                min={1}
+                max={10}
+                value={form.number_of_questions}
+                onChange={handleFormChange}
+                placeholder="1-10 questions"
+                required
+                disabled={loading}
+              />
+            </div>
+            
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Generating..." : "Generate Quiz"}
             </Button>
