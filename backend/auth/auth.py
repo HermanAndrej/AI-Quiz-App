@@ -15,7 +15,7 @@ async def register_user(user_data: UserRegisterRequest) -> UserRegisterResponse:
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
 
-    last_user = await User.find().sort(-User.user_id).limit(1).first_or_none()
+    last_user = await User.find_all().sort("-user_id").limit(1).first_or_none()
     next_id = 1 if last_user is None else last_user.user_id + 1
 
     hashed = hash_password(user_data.password)
